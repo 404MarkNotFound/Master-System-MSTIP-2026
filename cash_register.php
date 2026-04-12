@@ -185,7 +185,7 @@ if(isset($_POST['btnSearch2']))
  <?php } ?>
  <?php
  // Fixed: Calculate VAT and net_total here after the loop, outside of btnPayment block,
- // so totals are always visible on page load for the cashier before payment is submitted.
+ // so totals are always visible on page load for the cashier before payment is submitted. one tidfjbgdjgfbhdb
     if(!isset($_POST['btnPayment'])) {
      $vat = $subtotals * 0.12;
      $net_total = $subtotals + $vat;
@@ -211,3 +211,4 @@ if(isset($_POST['btnSearch2']))
 </body>
 
 </html>
+
