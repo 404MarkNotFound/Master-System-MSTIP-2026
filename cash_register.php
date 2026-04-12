@@ -25,7 +25,7 @@ body {
 <?php 
 @session_start();
 include("webconnect.php");
-
+// hiiiii
 // Fixed: changed date format from 'M d, Y H:i:s' (e.g. "Mar 22, 2026") to 'Y-m-d'
 // (e.g. "2026-03-22") so it saves correctly into MySQL DATE type columns.
 // The old format caused sales_date to store as 0000-00-00 in the sales table.
