@@ -45,16 +45,24 @@ include("webconnect.php");
 if(isset($_POST['Submit'])) 
 {
 
-$empnumber = $_POST['employeenumber'];
+$emp_number = $_POST['employeenumber'];
 $firstname = $_POST['firstname'];
-$mi= $_POST['mi'];
-$lname= $_POST['lastname'];
+$mi = $_POST['mi'];
+$lname = $_POST['lastname'];
+$address = $_POST['address'];
+$gender = $_POST['gender'];
+$employment_status = $_POST['emp_status'];
+$position = $_POST['position'];
+$sss = $_POST['sss'];
+$philhealth = $_POST['philhealth'];
+$tin = $_POST['tin'];
+$pagibig = $_POST['pagibig'];
 
 //$lastname =  
 //$position =  
 
 
-$sql2 = " SELECT * from employees WHERE employeenumber = '$empnumber' AND lastname = '$lastname' AND firstname = '$firstname' AND mi = '$mi' ";
+$sql2 = " SELECT * from employees WHERE employeenumber = '$emp_number' AND lastname = '$lname' AND firstname = '$firstname' AND mi = '$mi' ";
 $result = mysqli_query($conn, $sql2); 		
 //$row = mysqli_fetch_assoc($result);
 $count = mysqli_num_rows($result);
