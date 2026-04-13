@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -13,8 +13,24 @@
       .edit-input { width: 60px; }
       button { padding: 4px 8px; cursor: pointer; }
       .delete-btn { background: #ff4444; color: white; border: none; }
-      .update-btn { background: #4CAF50; color: white; border: none; }
+  .update-btn { background: #4CAF50; color: white; border: none; }
+  
+  .stock-out {
+    color: #ff4444;
+    font-weight: bold;
+    background: #ffe6e6;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .stock-low {
+    color: #ff8800;
+    font-weight: bold;
+    background: #fff3e6;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
     </style>
+
   </head>
   <body>
     <?php include("mainmenu.php"); ?>
@@ -125,7 +141,18 @@
             <tr>
               <td><?php echo htmlspecialchars($row['productNumber']); ?></td>
               <td><?php echo htmlspecialchars($row['productName']); ?></td>
-              <td><?php echo htmlspecialchars($row['qty']); ?></td>
+              <td>
+                <?php 
+                $stock_qty = (int)$row['qty'];
+                if ($stock_qty == 0) {
+                    echo '<span class="stock-out">Out of Stock</span>';
+                } elseif ($stock_qty < 20) {
+                    echo '<span class="stock-low">' . $stock_qty . ' (Low Stock)</span>';
+                } else {
+                    echo $stock_qty;
+                }
+                ?>
+              </td>
               <td>$<?php echo htmlspecialchars($row['price']); ?></td>
               <td><?php echo htmlspecialchars($row['lastname']); ?></td>
               <td>
