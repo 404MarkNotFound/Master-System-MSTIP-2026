@@ -57,16 +57,15 @@ This module handles employee time logs including time-in, time-out, and computed
 
 ---
 
-## Questions for HR Friend
-
-1. What is the exact name of your employees table?
-2. Are you making a work_schedule table or is schedule fixed (e.g. 8AM-5PM for all)?
-3. What is the exact column name for employee ID in your table?
-
----
-
 ## Deadline
 
 April 22
 
 YUNG KILA EARL DI CONNECTED RITO YUN
+
+eto na yung file structure ng attendance system ko
+
+attendance/
+├── timelog_clockin.php ← new: the bundy-clock UI (employee ID + password input)
+├── timelog_process.php ← new: handles INSERT of time_in / time_out
+├── timelogs.php ← existing: your main time logs list/report view
