@@ -13,7 +13,7 @@ form {
 
 label {display: block;}
 
-input[type=text], select {
+input[type=text], input[type=email], select {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
@@ -40,115 +40,120 @@ input[type=submit]:hover {
 </style>
   </head>
 <?php
-include("webconnect.php");
+include("../webconnect.php");
 
-if(isset($_POST['Submit'])) 
-{
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Submit'])) {
+    $emp_number = mysqli_real_escape_string($conn, $_POST['employeenumber'] ?? '');
+    $firstname = mysqli_real_escape_string($conn, $_POST['firstname'] ?? '');
+    $mname = mysqli_real_escape_string($conn, $_POST['mname'] ?? '');
+    $lname = mysqli_real_escape_string($conn, $_POST['lastname'] ?? '');
+    $address = mysqli_real_escape_string($conn, $_POST['address'] ?? '');
+    $gender = mysqli_real_escape_string($conn, $_POST['gender'] ?? '');
+    $employment_status = mysqli_real_escape_string($conn, $_POST['emp_status'] ?? '');
+    $position = mysqli_real_escape_string($conn, $_POST['position'] ?? '');
+    $sss = mysqli_real_escape_string($conn, $_POST['sss'] ?? '');
+    $philhealth = mysqli_real_escape_string($conn, $_POST['philhealth'] ?? '');
+    $tin = mysqli_real_escape_string($conn, $_POST['tin'] ?? '');
+    $pagibig = mysqli_real_escape_string($conn, $_POST['pagibig'] ?? '');
+    $taxcategory = mysqli_real_escape_string($conn, $_POST['taxcategory'] ?? '');
+    $salary = mysqli_real_escape_string($conn, $_POST['salary'] ?? '');
+    $rateperday = mysqli_real_escape_string($conn, $_POST['rateperday'] ?? '');
+    $cnum = mysqli_real_escape_string($conn, $_POST['cnum'] ?? '');
+    $email = mysqli_real_escape_string($conn, $_POST['email'] ?? '');
+    $department = mysqli_real_escape_string($conn, $_POST['department'] ?? '');
+    $civil_status = mysqli_real_escape_string($conn, $_POST['civil_status'] ?? '');
 
-$emp_number = $_POST['employeenumber'];
-$firstname = $_POST['firstname'];
-$mname = $_POST['mname'];
-$lname = $_POST['lastname'];
-$address = $_POST['address'];
-$gender = $_POST['gender'];
-$employment_status = $_POST['emp_status'];
-$position = $_POST['position'];
-$sss = $_POST['sss'];
-$philhealth = $_POST['philhealth'];
-$tin = $_POST['tin'];
-$pagibig = $_POST['pagibig'];
-$taxcategory = $_POST['taxcategory'];
-$salary = $_POST['salary'];
-$rateperday = $_POST['rateperday'];
-$cnum = $_POST['cnum'];
-$email = $_POST['email'];
-$department = $_POST['department'];
-$civil_status = $_POST['civil_status'];
-//$lastname =  
-//$position =  
+    $sql2 = "SELECT * FROM employees WHERE emp_num = '$emp_number' AND fname = '$firstname' AND mname = '$mname' AND lname = '$lname' AND address = '$address' AND gender = '$gender' AND employment_status = '$employment_status' AND position = '$position' AND sss = '$sss' AND philhealth = '$philhealth' AND tin = '$tin' AND pagibig = '$pagibig' AND taxcategory = '$taxcategory' AND salary = '$salary' AND rateperday = '$rateperday' AND cnum = '$cnum' AND email = '$email' AND department = '$department' AND civil_status = '$civil_status'";
+    $result = mysqli_query($conn, $sql2);
+    $count = $result ? mysqli_num_rows($result) : 0;
 
+    if ($count == 0) {
+        $sql = "INSERT INTO employees (emp_num, fname, mname, lname, address, gender, employment_status, position, sss, philhealth, tin, pagibig, taxcategory, salary, rateperday, cnum, email, department, civil_status) VALUES ('$emp_number','$firstname','$mname','$lname','$address','$gender','$employment_status','$position','$sss','$philhealth','$tin','$pagibig','$taxcategory','$salary','$rateperday','$cnum','$email','$department','$civil_status')";
+        if (mysqli_query($conn, $sql)) {
+            echo '<script>alert("Employee details has been successfully added!"); location.href="../index.php";</script>';
+            exit;
+        }
 
-$sql2 = " SELECT * from employees WHERE employeenumber = '$emp_number' AND lastname = '$lname' AND firstname = '$firstname' AND mname = '$mname' AND address = '$address' AND gender = '$gender' AND emp_status = '$employment_status' AND position = '$position' AND sss = '$sss' AND philhealth = '$philhealth' AND tin = '$tin' AND pagibig = '$pagibig' AND taxcategory = '$taxcategory' AND salary = '$salary' AND rateperday = '$rateperday' AND cnum = '$cnum' AND email = '$email' AND department = '$department' AND civil_status = '$civil_status' ";
-$result = mysqli_query($conn, $sql2); 		
-//$row = mysqli_fetch_assoc($result);
-$count = mysqli_num_rows($result);
-
-if($count==0) {
-
-	$sql = "INSERT INTO employees (emp_num, fname, mname, lname, ) VALUES('$empnumber','$firstname','$mname','$lname'  )";
-	mysqli_query($conn, $sql);
-	?>
-	<SCRIPT Language=Javascript>
-	<!--
-	alert("Employee details has been successfully added!");
-	// End -->
-	</SCRIPT>
-
-	<SCRIPT Language=Javascript>
-	<!--
-      location.href="index.php";
-	// End -->
-	</SCRIPT>
- <?php
-} else {
+        $error = mysqli_error($conn);
+        echo '<script>alert("Unable to save employee details: '.addslashes($error).'");</script>';
+    } else {
+        echo '<script>alert("Record already exists. Please try again!"); location.href="addemployee.php";</script>';
+        exit;
+    }
+}
 ?>
-
-<SCRIPT Language=Javascript>
-<!--
-	alert("Record Already exists. Please try again!");
-// End -->
-</SCRIPT>
-
-<SCRIPT Language=Javascript>
-<!--
- location.href="addemployee.php";
-// End -->
-
-</SCRIPT>
-
-<?php
-  }
- }
-
-
-?>
-<?php include("mainmenu.php") ; ?>
-  <body>
+<body>
+<?php include("../mainmenu.php"); ?>
     <div class="container">
-      <form name="myform" method="POST">
+      <form name="myform" method="POST" action="">
       <label for="header"><h2>Add Employee Details</h2></label>
-        <label for="fname">First Name</label>
-        <input type="text" id="fname" name="firstname" placeholder="Employee Number">
 
-        <label for="fname">First Name</label>
-        <input type="text" id="firstname" name="firstname" placeholder="First Name">
+        <label for="employeenumber">Employee Number</label>
+        <input type="text" id="employeenumber" name="employeenumber" placeholder="Employee Number" required>
 
-        <label for="middle_name">Middle Name</label>
-        <input type="text" id="mi" name="mi" placeholder="Middle Name">
+        <label for="firstname">First Name</label>
+        <input type="text" id="firstname" name="firstname" placeholder="First Name" required>
 
-        <label for="lastname">Middle Name</label>
-        <input type="text" id="lastname" name="lastname" placeholder="Last Name">
+        <label for="mname">Middle Name</label>
+        <input type="text" id="mname" name="mname" placeholder="Middle Name">
+
+        <label for="lastname">Last Name</label>
+        <input type="text" id="lastname" name="lastname" placeholder="Last Name" required>
 
         <label for="address">Address</label>
         <input type="text" id="address" name="address" placeholder="Address">
-        
+
         <label for="gender">Gender</label>
         <select id="gender" name="gender">
+          <option value="">Select gender</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
 
         <label for="emp_status">Employment Status</label>
         <input type="text" id="emp_status" name="emp_status" placeholder="Employment Status">
-        
-        <input type="submit" value="Submit">
+
+        <label for="position">Position</label>
+        <input type="text" id="position" name="position" placeholder="Position">
+
+        <label for="sss">SSS Number</label>
+        <input type="text" id="sss" name="sss" placeholder="SSS Number">
+
+        <label for="philhealth">PhilHealth Number</label>
+        <input type="text" id="philhealth" name="philhealth" placeholder="PhilHealth Number">
+
+        <label for="tin">TIN Number</label>
+        <input type="text" id="tin" name="tin" placeholder="TIN Number">
+
+        <label for="pagibig">Pag-IBIG Number</label>
+        <input type="text" id="pagibig" name="pagibig" placeholder="Pag-IBIG Number">
+
+        <label for="taxcategory">Tax Category</label>
+        <input type="text" id="taxcategory" name="taxcategory" placeholder="Tax Category">
+
+        <label for="salary">Salary</label>
+        <input type="text" id="salary" name="salary" placeholder="Salary">
+
+        <label for="rateperday">Rate Per Day</label>
+        <input type="text" id="rateperday" name="rateperday" placeholder="Rate Per Day">
+
+        <label for="cnum">Contact Number</label>
+        <input type="text" id="cnum" name="cnum" placeholder="Contact Number">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Email">
+
+        <label for="department">Department</label>
+        <input type="text" id="department" name="department" placeholder="Department">
+
+        <label for="civil_status">Civil Status</label>
+        <input type="text" id="civil_status" name="civil_status" placeholder="Civil Status">
+
+        <input type="submit" name="Submit" value="Submit">
       </form>
         <center>
-         <div class="signup-link"><a href="time_logs.php">Time Logs</a> | &nbsp;<a href="index.php">Home</a></div>
+         <div class="signup-link"><a href="../Attendance/time_logs.php">Time Logs</a> | &nbsp;<a href="../index.php">Home</a></div>
+        </center>
      </div>
- 
   </body>
-
-</body>
 </html>
-
