@@ -115,7 +115,13 @@ if(isset($_POST['btnSearch22']))
  ?>
   <tr>
     <td height="26" bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['emp_num']; ?></span></td>
-    <td height="26" align="center" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" ></td>
+    <td height="26" align="center" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" >
+      <?php if (!empty($row4['photo'])): ?>
+        <img src="<?php echo htmlspecialchars($row4['photo']); ?>" alt="Employee Photo" style="max-width:60px; max-height:60px; border-radius:4px;">
+      <?php else: ?>
+        -
+      <?php endif; ?>
+    </td>
     <td bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['lname']; ?></span></td>
     <td bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['fname']; ?></span></td>
     <td align="left" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" >&nbsp;<?php ; ?></td 
