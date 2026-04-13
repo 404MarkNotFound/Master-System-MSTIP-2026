@@ -47,7 +47,7 @@ if(isset($_POST['Submit']))
 
 $emp_number = $_POST['employeenumber'];
 $firstname = $_POST['firstname'];
-$mi = $_POST['mi'];
+$mname = $_POST['mname'];
 $lname = $_POST['lastname'];
 $address = $_POST['address'];
 $gender = $_POST['gender'];
@@ -57,19 +57,25 @@ $sss = $_POST['sss'];
 $philhealth = $_POST['philhealth'];
 $tin = $_POST['tin'];
 $pagibig = $_POST['pagibig'];
-
+$taxcategory = $_POST['taxcategory'];
+$salary = $_POST['salary'];
+$rateperday = $_POST['rateperday'];
+$cnum = $_POST['cnum'];
+$email = $_POST['email'];
+$department = $_POST['department'];
+$civil_status = $_POST['civil_status'];
 //$lastname =  
 //$position =  
 
 
-$sql2 = " SELECT * from employees WHERE employeenumber = '$emp_number' AND lastname = '$lname' AND firstname = '$firstname' AND mi = '$mi' ";
+$sql2 = " SELECT * from employees WHERE employeenumber = '$emp_number' AND lastname = '$lname' AND firstname = '$firstname' AND mname = '$mname' AND address = '$address' AND gender = '$gender' AND emp_status = '$employment_status' AND position = '$position' AND sss = '$sss' AND philhealth = '$philhealth' AND tin = '$tin' AND pagibig = '$pagibig' AND taxcategory = '$taxcategory' AND salary = '$salary' AND rateperday = '$rateperday' AND cnum = '$cnum' AND email = '$email' AND department = '$department' AND civil_status = '$civil_status' ";
 $result = mysqli_query($conn, $sql2); 		
 //$row = mysqli_fetch_assoc($result);
 $count = mysqli_num_rows($result);
 
 if($count==0) {
 
-	$sql = "INSERT INTO employees (emp_num, fname, mname, lname) VALUES('$empnumber','$firstname','$mi','$lname'  )";
+	$sql = "INSERT INTO employees (emp_num, fname, mname, lname, ) VALUES('$empnumber','$firstname','$mname','$lname'  )";
 	mysqli_query($conn, $sql);
 	?>
 	<SCRIPT Language=Javascript>
