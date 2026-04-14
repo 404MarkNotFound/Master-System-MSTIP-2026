@@ -63,12 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Submit'])) {
     $department = mysqli_real_escape_string($conn, $_POST['department'] ?? '');
     $civil_status = mysqli_real_escape_string($conn, $_POST['civil_status'] ?? '');
 
+    $photo = '';
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
+        $target_dir = "uploads/employees/";
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+        $photo_name = basename($_FILES["photo"]["name"]);
+        $target_file = $target_dir . uniqid() . '_' . $photo_name;
+        if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+            $photo = $target_file;
+        }
+    }
+
     $sql2 = "SELECT * FROM employees WHERE emp_num = '$emp_number' AND fname = '$firstname' AND mname = '$mname' AND lname = '$lname' AND address = '$address' AND gender = '$gender' AND employment_status = '$employment_status' AND position = '$position' AND sss = '$sss' AND philhealth = '$philhealth' AND tin = '$tin' AND pagibig = '$pagibig' AND taxcategory = '$taxcategory' AND salary = '$salary' AND rateperday = '$rateperday' AND cnum = '$cnum' AND email = '$email' AND department = '$department' AND civil_status = '$civil_status'";
     $result = mysqli_query($conn, $sql2);
     $count = $result ? mysqli_num_rows($result) : 0;
 
     if ($count == 0) {
-        $sql = "INSERT INTO employees (emp_num, fname, mname, lname, address, gender, employment_status, position, sss, philhealth, tin, pagibig, taxcategory, salary, rateperday, cnum, email, department, civil_status) VALUES ('$emp_number','$firstname','$mname','$lname','$address','$gender','$employment_status','$position','$sss','$philhealth','$tin','$pagibig','$taxcategory','$salary','$rateperday','$cnum','$email','$department','$civil_status')";
+        $sql = "INSERT INTO employees (emp_num, fname, mname, lname, address, gender, employment_status, position, sss, philhealth, tin, pagibig, taxcategory, salary, rateperday, photo, cnum, email, department, civil_status) VALUES ('$emp_number','$firstname','$mname','$lname','$address','$gender','$employment_status','$position','$sss','$philhealth','$tin','$pagibig','$taxcategory','$salary','$rateperday','$photo','$cnum','$email','$department','$civil_status')";
         if (mysqli_query($conn, $sql)) {
             echo '<script>alert("Employee details has been successfully added!"); location.href="../index.php";</script>';
             exit;
@@ -85,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Submit'])) {
 <body>
 <?php include("../mainmenu.php"); ?>
     <div class="container">
-      <form name="myform" method="POST" action="">
+      <form name="myform" method="POST" action="" enctype="multipart/form-data">
       <label for="header"><h2>Add Employee Details</h2></label>
 
         <label for="employeenumber">Employee Number</label>
@@ -145,6 +158,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Submit'])) {
 
         <label for="department">Department</label>
         <input type="text" id="department" name="department" placeholder="Department">
+
+        <label for="photo">Employee Photo</label>
+        <input type="file" id="photo" name="photo" accept="image/*">
 
         <label for="civil_status">Civil Status</label>
         <input type="text" id="civil_status" name="civil_status" placeholder="Civil Status">
