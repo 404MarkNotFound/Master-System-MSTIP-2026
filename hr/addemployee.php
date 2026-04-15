@@ -43,25 +43,33 @@ input[type=submit]:hover {
 include("../webconnect.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Submit'])) {
-    $emp_number = mysqli_real_escape_string($conn, $_POST['employeenumber'] ?? '');
-    $firstname = mysqli_real_escape_string($conn, $_POST['firstname'] ?? '');
-    $mname = mysqli_real_escape_string($conn, $_POST['mname'] ?? '');
-    $lname = mysqli_real_escape_string($conn, $_POST['lastname'] ?? '');
-    $address = mysqli_real_escape_string($conn, $_POST['address'] ?? '');
-    $gender = mysqli_real_escape_string($conn, $_POST['gender'] ?? '');
-    $employment_status = mysqli_real_escape_string($conn, $_POST['emp_status'] ?? '');
-    $position = mysqli_real_escape_string($conn, $_POST['position'] ?? '');
-    $sss = mysqli_real_escape_string($conn, $_POST['sss'] ?? '');
-    $philhealth = mysqli_real_escape_string($conn, $_POST['philhealth'] ?? '');
-    $tin = mysqli_real_escape_string($conn, $_POST['tin'] ?? '');
-    $pagibig = mysqli_real_escape_string($conn, $_POST['pagibig'] ?? '');
-    $taxcategory = mysqli_real_escape_string($conn, $_POST['taxcategory'] ?? '');
-    $salary = mysqli_real_escape_string($conn, $_POST['salary'] ?? '');
-    $rateperday = mysqli_real_escape_string($conn, $_POST['rateperday'] ?? '');
-    $cnum = mysqli_real_escape_string($conn, $_POST['cnum'] ?? '');
-    $email = mysqli_real_escape_string($conn, $_POST['email'] ?? '');
-    $department = mysqli_real_escape_string($conn, $_POST['department'] ?? '');
-    $civil_status = mysqli_real_escape_string($conn, $_POST['civil_status'] ?? '');
+    // Only run this code when the form is submitted via POST.
+    // Sanitize all expected POST inputs in a single loop.
+    $fields = [
+        'employeenumber' => 'emp_number',
+        'firstname' => 'firstname',
+        'mname' => 'mname',
+        'lastname' => 'lname',
+        'address' => 'address',
+        'gender' => 'gender',
+        'emp_status' => 'employment_status',
+        'position' => 'position',
+        'sss' => 'sss',
+        'philhealth' => 'philhealth',
+        'tin' => 'tin',
+        'pagibig' => 'pagibig',
+        'taxcategory' => 'taxcategory',
+        'salary' => 'salary',
+        'rateperday' => 'rateperday',
+        'cnum' => 'cnum',
+        'email' => 'email',
+        'department' => 'department',
+        'civil_status' => 'civil_status',
+    ];
+
+    foreach ($fields as $inputName => $varName) {
+        ${$varName} = mysqli_real_escape_string($conn, $_POST[$inputName] ?? '');
+    }
 
     $photo = '';
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
