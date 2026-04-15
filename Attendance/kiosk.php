@@ -14,159 +14,122 @@ body {
   text-align: center;
 }
 
-h2 {
-  margin-top: 30px;
-}
+h2 { margin-top: 30px; }
 
 #liveclock {
   font-size: 28px;
   font-weight: bold;
-  color: #333;
-  margin: 10px 0 30px 0;
+  margin: 20px 0;
 }
 
 form {
   display: inline-block;
-  background-color: #f2f2f2;
+  background: #f2f2f2;
+  padding: 30px;
   border-radius: 5px;
-  padding: 30px 40px;
-  text-align: left;
 }
 
-label {
-  display: block;
-  font-weight: bold;
-  margin-top: 12px;
-}
+label { display:block; margin-top:10px; font-weight:bold; }
 
 input[type=text], input[type=password] {
   width: 100%;
   padding: 10px;
-  margin: 6px 0 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  font-size: 15px;
+  margin-top: 5px;
 }
 
-.btn-row {
-  margin-top: 15px;
-  display: flex;
-  gap: 10px;
-}
+.btn-row { display:flex; gap:10px; margin-top:15px; }
 
 input[type=submit] {
-  flex: 1;
-  padding: 12px;
-  font-size: 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
+  flex:1;
+  padding:12px;
+  border:none;
+  color:#fff;
+  cursor:pointer;
 }
 
-#btnTimeIn  { background-color: #4CAF50; }
-#btnTimeOut { background-color: #2196F3; }
-
-input[type=submit]:hover { opacity: 0.88; }
+#btnTimeIn { background:#4CAF50; }
+#btnTimeOut { background:#2196F3; }
 
 .msg-box {
-  display: inline-block;
   margin: 20px auto;
-  padding: 12px 24px;
-  border-radius: 4px;
-  font-size: 15px;
+  padding: 10px;
+  display: inline-block;
 }
-.msg-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-.msg-error   { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-
-a { color: #333; font-size: 13px; }
+.msg-success { background:#d4edda; }
+.msg-error { background:#f8d7da; }
 </style>
 </head>
+
 <body>
 
 <?php
 session_start();
 include("../webconnect.php");
 
-if (!isset($conn)) {
-  die("Database connection not found.");
-}
-
 $message = '';
 $msg_type = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-  $emp_num  = mysqli_real_escape_string($conn, trim($_POST['emp_num']  ?? ''));
-  $password = trim($_POST['password'] ?? '');
-  $action   = $_POST['action'] ?? ''; // 'timein' or 'timeout'
+  $emp_num  = $_POST['emp_num'] ?? '';
+  $password = $_POST['password'] ?? '';
+  $action   = $_POST['action'] ?? '';
 
-  if ($emp_num == '' || $password == '') {
-    $message  = "Please enter your Employee Number and Password.";
-    $msg_type = 'error';
+  $sql = "SELECT * FROM employees WHERE emp_num='$emp_num' AND password='$password'";
+  $res = mysqli_query($conn, $sql);
 
+  if (mysqli_num_rows($res) == 0) {
+    $message = "Invalid login";
+    $msg_type = "error";
   } else {
-    // verify employee exists in employees table using emp_num + password
-    $sql_check = "SELECT * FROM employees WHERE emp_num = '$emp_num' AND password = '$password' LIMIT 1";
-    $res_check  = mysqli_query($conn, $sql_check);
 
-    if (!$res_check || mysqli_num_rows($res_check) == 0) {
-      $message  = "Employee not found or wrong password. Please try again.";
-      $msg_type = 'error';
+    $emp = mysqli_fetch_assoc($res);
+    $emp_id = $emp['id'];
+    $name = $emp['fname'] . " " . $emp['lname'];
 
-    } else {
-      $emp = mysqli_fetch_assoc($res_check);
-      $emp_id        = $emp['id'];
-      $employee_name = $emp['fname'] . ' ' . $emp['lname'];
-      $today         = date('Y-m-d');
-      $now_time      = date('H:i:s');
+    $today = date('Y-m-d');
+    $now = date('H:i:s');
 
-      if ($action === 'timein') {
-        // check if already timed in today
-        $sql_existing = "SELECT * FROM attendance_logs WHERE emp_num = '$emp_num' AND date = '$today' LIMIT 1";
-        $res_existing  = mysqli_query($conn, $sql_existing);
+    $check = "SELECT * FROM attendance_logs WHERE emp_num='$emp_num' AND log_date='$today'";
+    $check_res = mysqli_query($conn, $check);
 
-        if (mysqli_num_rows($res_existing) > 0) {
-          $message  = "You already timed in today ($today).";
-          $msg_type = 'error';
-        } else {
-          // determine status
-          $cutoff = '08:00:00';
-          $status = ($now_time > $cutoff) ? 'Late' : 'On Time';
+    if ($action == 'timein') {
 
-          $sql_in = "INSERT INTO attendance_logs (emp_id, emp_num, employee_name, date, time_in, status, created_at)
-                     VALUES ('$emp_id', '$emp_num', '$employee_name', '$today', '$now_time', '$status', NOW())";
-          if (mysqli_query($conn, $sql_in)) {
-            $message  = "Time In recorded for $employee_name at $now_time. Status: $status";
-            $msg_type = 'success';
-          } else {
-            $message  = "Error saving Time In: " . mysqli_error($conn);
-            $msg_type = 'error';
-          }
-        }
+      if (mysqli_num_rows($check_res) > 0) {
+        $message = "Already timed in today";
+        $msg_type = "error";
+      } else {
 
-      } elseif ($action === 'timeout') {
-        // find today's time in record with no timeout yet
-        $sql_find = "SELECT * FROM attendance_logs WHERE emp_num = '$emp_num' AND date = '$today' AND (time_out IS NULL OR time_out = '') LIMIT 1";
-        $res_find  = mysqli_query($conn, $sql_find);
+        $status = ($now > '08:00:00') ? 'Late' : 'On Time';
 
-        if (mysqli_num_rows($res_find) == 0) {
-          $message  = "No Time In record found for today, or you already timed out.";
-          $msg_type = 'error';
-        } else {
-          $log = mysqli_fetch_assoc($res_find);
-          $log_id = $log['id'];
+        mysqli_query($conn,
+        "INSERT INTO attendance_logs
+        (emp_id, emp_num, employee_name, log_date, time_in, status, created_at)
+        VALUES
+        ('$emp_id', '$emp_num', '$name', '$today', '$now', '$status', NOW())");
 
-          $sql_out = "UPDATE attendance_logs SET time_out = '$now_time' WHERE id = '$log_id'";
-          if (mysqli_query($conn, $sql_out)) {
-            $message  = "Time Out recorded for $employee_name at $now_time.";
-            $msg_type = 'success';
-          } else {
-            $message  = "Error saving Time Out: " . mysqli_error($conn);
-            $msg_type = 'error';
-          }
-        }
+        $message = "Time In saved";
+        $msg_type = "success";
+      }
+
+    } else if ($action == 'timeout') {
+
+      $q = "SELECT * FROM attendance_logs
+            WHERE emp_num='$emp_num' AND log_date='$today' AND time_out IS NULL";
+      $r = mysqli_query($conn, $q);
+
+      if (mysqli_num_rows($r) == 0) {
+        $message = "No Time In found or already timed out";
+        $msg_type = "error";
+      } else {
+
+        mysqli_query($conn,
+        "UPDATE attendance_logs
+        SET time_out='$now'
+        WHERE emp_num='$emp_num' AND log_date='$today'");
+
+        $message = "Time Out saved";
+        $msg_type = "success";
       }
     }
   }
@@ -175,45 +138,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <h2>Attendance Kiosk</h2>
 
-<!-- live clock -->
 <div id="liveclock"></div>
+
 <script>
-  function updateClock() {
-    var now = new Date();
-    document.getElementById('liveclock').textContent = now.toLocaleString();
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
+setInterval(()=> {
+  document.getElementById("liveclock").innerText = new Date().toLocaleString();
+},1000);
 </script>
 
-<?php if ($message != ''): ?>
-  <div class="msg-box msg-<?php echo $msg_type; ?>">
-    <?php echo htmlspecialchars($message); ?>
-  </div><br>
+<?php if($message): ?>
+<div class="msg-box msg-<?= $msg_type ?>">
+  <?= $message ?>
+</div>
 <?php endif; ?>
 
-<form method="POST" action="kiosk.php">
-  <label for="emp_num">Employee Number</label>
-  <input type="text" id="emp_num" name="emp_num" placeholder="e.g. EMP001" required>
+<form method="POST">
+  <label>Employee Number</label>
+  <input type="text" name="emp_num" required>
 
-  <label for="password">Password</label>
-  <input type="password" id="password" name="password" placeholder="Enter password" required>
+  <label>Password</label>
+  <input type="password" name="password" required>
 
   <div class="btn-row">
-    <input type="submit" id="btnTimeIn"  name="action" value="timein"  style="background-color:#4CAF50;">
-    <input type="submit" id="btnTimeOut" name="action" value="timeout" style="background-color:#2196F3;">
+    <input type="submit" name="action" value="timein" id="btnTimeIn">
+    <input type="submit" name="action" value="timeout" id="btnTimeOut">
   </div>
 </form>
-
-<script>
-  window.onload = function() {
-    document.getElementById('btnTimeIn').value  = 'Time In';
-    document.getElementById('btnTimeOut').value = 'Time Out';
-  };
-</script>
-
-<br>
-<a href="../index.html">Back to Home</a>
 
 </body>
 </html>
