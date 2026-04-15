@@ -26,7 +26,6 @@ th, td {
 
 th {
   background-color: #E0E8F1;
-  font-weight: bold;
 }
 
 tr:nth-child(even) { background-color: #F4F4F4; }
@@ -44,7 +43,7 @@ if (!isset($conn)) {
   die("Database connection not found.");
 }
 
-$sql = "SELECT * FROM attendance_logs ORDER BY date DESC, time_in DESC LIMIT 500";
+$sql = "SELECT * FROM attendance_logs ORDER BY log_date DESC, time_in DESC LIMIT 500";
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
@@ -54,102 +53,97 @@ if (!$result) {
 include("../mainmenu.php");
 ?>
 
-<div style="text-align: center; margin: 20px;">
+<div style="text-align:center; margin:20px;">
   <h2>Time Logs</h2>
-  <!-- live clock -->
-  <div id="liveclock" style="font-size:14px; color:#555;"></div>
-  <script>
-    function updateClock() {
-      var now = new Date();
-      document.getElementById('liveclock').textContent = now.toLocaleString();
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-  </script>
+  <div id="liveclock"></div>
 </div>
+
+<script>
+function updateClock() {
+  document.getElementById('liveclock').textContent = new Date().toLocaleString();
+}
+updateClock();
+setInterval(updateClock, 1000);
+</script>
 
 <table>
-  <tr>
-    <th>ID</th>
-    <th>Emp ID</th>
-    <th>Emp Num</th>
-    <th>Employee Name</th>
-    <th>Date</th>
-    <th>Time In</th>
-    <th>Time Out</th>
-    <th>Hours Worked</th>
-    <th>Late (hrs)</th>
-    <th>Status</th>
-  </tr>
+<tr>
+  <th>ID</th>
+  <th>Emp ID</th>
+  <th>Emp Num</th>
+  <th>Name</th>
+  <th>Date</th>
+  <th>Time In</th>
+  <th>Time Out</th>
+  <th>Hours Worked</th>
+  <th>Late (hrs)</th>
+  <th>Status</th>
+</tr>
 
-  <?php if (mysqli_num_rows($result) > 0): ?>
+<?php while($row = mysqli_fetch_assoc($result)): ?>
 
-    <?php while($row2 = mysqli_fetch_assoc($result)): ?>
+<?php
+$time_in  = $row['time_in'];
+$time_out = $row['time_out'];
 
-      <?php
-        // --- Professor's algorithm ---
-        $start_time = new DateTime("08:00:00");
-        $end_time   = new DateTime("17:00:00");
-        $date1 = $row2['time_in'];
-        $date2 = $row2['time_out'];
-        $time1 = new DateTime($date1);
-        $time2 = new DateTime($date2);
-        $timediff = $time1->diff($time2);
+$start = new DateTime("08:00:00");
+$inTime = $time_in ? new DateTime($time_in) : null;
+$outTime = $time_out ? new DateTime($time_out) : null;
 
-        if ($date2 == '') {
-          $elapsed_time = '';
-        } else {
-          $elapsed_time = $timediff->format('%h.%i');
-        }
+/* HOURS WORKED */
+if ($inTime && $outTime) {
+    $diff = $inTime->diff($outTime);
+    $hours = $diff->h + ($diff->i / 60);
 
-        // worked hours minus lunch break
-        if ($date2 > '13:00:00') {
-          $elapsed_time = $timediff->format('%h.%i') - 1;
-        }
+    // lunch deduction rule
+    if ($outTime->format('H:i:s') > '13:00:00') {
+        $hours -= 1;
+    }
 
-        if ($date1 > '08:00:00') {
-          $timediff2 = $start_time->diff($time1);
-          $late = $timediff2->format('%h.%i');
-        } else {
-          $late = 0;
-        }
+    $hoursWorked = round(max($hours, 0), 2);
+} else {
+    $hoursWorked = '';
+}
 
-        // --- auto status based on algorithm result ---
-        if ($date1 == '') {
-          $status = 'Absent';
-        } elseif ($late > 0) {
-          $status = 'Late';
-        } else {
-          $status = 'On Time';
-        }
-      ?>
+/* LATE CALC */
+if ($inTime) {
+    if ($inTime->format('H:i:s') > '08:00:00') {
+        $lateDiff = $start->diff($inTime);
+        $late = $lateDiff->h + ($lateDiff->i / 60);
+        $late = round($late, 2);
+    } else {
+        $late = 0;
+    }
+} else {
+    $late = '';
+}
 
-      <tr>
-        <td><?php echo $row2['id']; ?></td>
-        <td><?php echo htmlspecialchars($row2['emp_id']); ?></td>
-        <td><?php echo htmlspecialchars($row2['emp_num']); ?></td>
-        <td><?php echo htmlspecialchars($row2['employee_name']); ?></td>
-        <td><?php echo htmlspecialchars($row2['date']); ?></td>
-        <td><?php echo htmlspecialchars($row2['time_in']); ?></td>
-        <td><?php echo htmlspecialchars($row2['time_out']); ?></td>
-        <td><?php echo $elapsed_time; ?></td>
-        <td><?php echo $late; ?></td>
-        <td><?php echo $status; ?></td>
-      </tr>
+/* STATUS */
+if (!$time_in) {
+    $status = "Absent";
+} elseif ($late > 0) {
+    $status = "Late";
+} else {
+    $status = "On Time";
+}
+?>
 
-    <?php endwhile; ?>
+<tr>
+  <td><?= $row['id']; ?></td>
+  <td><?= $row['emp_id']; ?></td>
+  <td><?= $row['emp_num']; ?></td>
+  <td><?= $row['employee_name']; ?></td>
+  <td><?= $row['log_date']; ?></td>
+  <td><?= $time_in; ?></td>
+  <td><?= $time_out; ?></td>
+  <td><?= $hoursWorked; ?></td>
+  <td><?= $late; ?></td>
+  <td><?= $status; ?></td>
+</tr>
 
-  <?php else: ?>
-    <tr>
-      <td colspan="10" style="text-align:center;">No time logs found.</td>
-    </tr>
-  <?php endif; ?>
+<?php endwhile; ?>
 
 </table>
-
-<div style="text-align: center; margin: 20px;">
-  <a href="../index.html">Home</a>
-</div>
 
 </body>
 </html>
