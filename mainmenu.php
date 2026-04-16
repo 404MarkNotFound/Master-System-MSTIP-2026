@@ -142,7 +142,7 @@ body {margin:0;font-family:Arial}
     <div class="dropdown-content">
       <a href="#">Prepare Payroll</a>
       <a href="#">Payroll Reports</a>
-      <a href="time_logs.php">Time Logs</a>
+      <a href="Attendance/time_logs.php">Time Logs</a>
     </div>
   </div> 
    <div class="dropdown">
@@ -152,7 +152,7 @@ body {margin:0;font-family:Arial}
     <div class="dropdown-content">
       <a href="addemployee.php">Add Employee</a>
       <a href="employee_mastelrist">Employee Masterlist</a>
-      <a href="time_logs.php">Time Logs</a>
+      <a href="Attendance/time_logs.php">Time Logs</a>
     </div>
   </div> 
     <div class="dropdown">
