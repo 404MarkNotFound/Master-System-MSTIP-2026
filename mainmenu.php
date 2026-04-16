@@ -181,3 +181,19 @@ function myFunction() {
   }
 }
 </script>
+
+<h1>The MakSci BSIS Inventor's Group</h1>
+A web system is a program that runs on the web, allowing users to access it through a browser. Web systems can be used to manage data, integrate business processes, and create applications. 
+How web systems work
+Web systems use web services and software agents to integrate business processes 
+They can be accessed over the HTTP protocol 
+They work with a variety of web development features to provide a secure environment 
+They can control and manage data.<br><br>
+<center>
+<p>
+<h2>Our BSIS Elective Enterprise Architecture</h2><br>
+<img src="mstip_logo.png" width="50%" align="square"><br><br>
+With the use of RFID card reader, data will be converted and send to MySQL server 
+
+</body>
+</html></p>
