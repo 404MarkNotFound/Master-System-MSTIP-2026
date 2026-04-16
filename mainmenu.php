@@ -130,8 +130,8 @@ body {margin:0;font-family:Arial}
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content">
-      <a href="#">Add Products</a>
-      <a href="#">Produts Masterlist</a>
+      <a href="add_products.php">Add Products</a>
+      <a href="inventory.php">Products Masterlist</a>
       <a href="#">Link 3</a>
     </div>
   </div> 
