@@ -3,30 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Attendance Kiosk</title>
+<title>Attendance System</title>
 
 <style>
 body {
   margin: 0;
   padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: #FFFFFF;
   font-family: Verdana, Arial, Helvetica, sans-serif;
-  text-align: center;
 }
 
-h2 { margin-top: 30px; }
+h2 { margin: 20px 0 30px 0; font-size: 2.5em; }
 
 #liveclock {
-  font-size: 28px;
+  font-size: 2.2em;
   font-weight: bold;
   margin: 20px 0;
+  color: #070707;
 }
 
 form {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 400px;
   background: #f2f2f2;
-  padding: 30px;
-  border-radius: 5px;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  box-sizing: border-box;
 }
 
 label { display:block; margin-top:10px; font-weight:bold; }
@@ -136,14 +146,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h2>Attendance Kiosk</h2>
+<h2>Attendance System</h2>
 
 <div id="liveclock"></div>
 
 <script>
 setInterval(()=> {
-  document.getElementById("liveclock").innerText = new Date().toLocaleString();
-},1000);
+  const now = new Date();
+  const date = now.toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  }).replace(/,/g, '');
+  const time = now.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    second: '2-digit',
+    hour12: true 
+  });
+  document.getElementById("liveclock").innerText = `${date} | ${time}`;
+}, 1000);
 </script>
 
 <?php if($message): ?>
