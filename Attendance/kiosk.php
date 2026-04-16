@@ -85,7 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'] ?? '';
   $action   = $_POST['action'] ?? '';
 
-  $sql = "SELECT * FROM employees WHERE emp_num='$emp_num' AND password='$password'";
+  // ✅ SIMPLE AUTH (plain password)
+  $sql = "SELECT * FROM attendance_credentials 
+          WHERE emp_num='$emp_num' 
+          AND password='$password' 
+          AND is_active=1";
+
   $res = mysqli_query($conn, $sql);
 
   if (mysqli_num_rows($res) == 0) {
@@ -93,7 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $msg_type = "error";
   } else {
 
-    $emp = mysqli_fetch_assoc($res);
+    // ✅ get employee info from HR table
+    $emp_query = "SELECT * FROM employees WHERE emp_num='$emp_num'";
+    $emp_res = mysqli_query($conn, $emp_query);
+    $emp = mysqli_fetch_assoc($emp_res);
+
     $emp_id = $emp['id'];
     $name = $emp['fname'] . " " . $emp['lname'];
 
