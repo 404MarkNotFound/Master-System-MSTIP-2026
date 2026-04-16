@@ -33,13 +33,13 @@
 
   </head>
   <body>
-    <?php include("mainmenu.php"); ?>
+    <?php include("../mainmenu.php"); ?>
     <div class="container">
       <div class="wrapper">
         <div class="title"><span>Inventory Management</span></div>
         
         <?php
-        include("webconnect.php");
+        include("../webconnect.php");
         
         // Handle Delete
         if (isset($_POST['action']) && $_POST['action'] == 'delete') {
@@ -110,7 +110,7 @@
             <input type="text" name="lastname" placeholder="Category/Description" required>
           </div>
           <div class="row">
-            <i class="fas fa-dollar-sign"></i>
+            <i class="fas fa-money-bill"></i>
             <input type="number" step="0.01" name="price" placeholder="Unit Price" required>
           </div>
           <div class="row button">
@@ -139,8 +139,8 @@
           <tbody>
             <?php while($row = mysqli_fetch_assoc($products_result)) { ?>
             <tr>
-              <td><?php echo htmlspecialchars($row['productNumber']); ?></td>
-              <td><?php echo htmlspecialchars($row['productName']); ?></td>
+              <td><?php echo htmlspecialchars($row['productnumber']); ?></td>
+              <td><?php echo htmlspecialchars($row['productname']); ?></td>
               <td>
                 <?php 
                 $stock_qty = (int)$row['qty'];
@@ -159,15 +159,15 @@
                 <!-- Update Form -->
                 <form method="post" class="action-form" style="display: inline;">
                   <input type="hidden" name="action" value="update">
-                  <input type="hidden" name="productNumber" value="<?php echo $row['productNumber']; ?>">
+                  <input type="hidden" name="productNumber" value="<?php echo $row['productnumber']; ?>">
                   Qty: <input type="number" class="edit-input" name="qty" value="<?php echo $row['qty']; ?>" required>
                   Price: <input type="number" step="0.01" class="edit-input" name="price" value="<?php echo $row['price']; ?>" required>
                   <button type="submit" class="update-btn">Update</button>
                 </form>
                 <!-- Delete Form -->
-                <form method="post" class="action-form" style="display: inline;" onsubmit="return confirm('Delete <?php echo $row['productName']; ?>?');">
+                <form method="post" class="action-form" style="display: inline;" onsubmit="return confirm('Delete <?php echo $row['productname']; ?>?');">
                   <input type="hidden" name="action" value="delete">
-                  <input type="hidden" name="productNumber" value="<?php echo $row['productNumber']; ?>">
+                  <input type="hidden" name="productNumber" value="<?php echo $row['productnumber']; ?>">
                   <button type="submit" class="delete-btn">Delete</button>
                 </form>
               </td>
