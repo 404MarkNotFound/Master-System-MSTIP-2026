@@ -5,7 +5,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "enterprise_architecture";  // Database name from SQL dumps (attendance_logs, employees, etc.)
+$dbname = "master_system";  // Database name from SQL dumps (attendance_logs, employees, etc.)
 
 // Create MySQLi connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);
