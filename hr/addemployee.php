@@ -1,23 +1,148 @@
+<?php
+include("webconnect.php");
+
+if(isset($_POST['save'])){
+
+mysqli_query($conn,"INSERT INTO employees (
+qr_code, emp_num, fname, mname, lname, address, gender,
+employment_status, position, sss, philhealth, tin, pagibig,
+taxcategory, salary, photo, cnum, email, department, civil_status
+) VALUES (
+'".$_POST['qr']."',
+'".$_POST['emp']."',
+'".$_POST['fname']."',
+'".$_POST['mname']."',
+'".$_POST['lname']."',
+'".$_POST['address']."',
+'".$_POST['gender']."',
+'".$_POST['status']."',
+'".$_POST['position']."',
+'".$_POST['sss']."',
+'".$_POST['philhealth']."',
+'".$_POST['tin']."',
+'".$_POST['pagibig']."',
+'".$_POST['tax']."',
+'".$_POST['salary']."',
+'".$_POST['photo']."',
+'".$_POST['cnum']."',
+'".$_POST['email']."',
+'".$_POST['department']."',
+'".$_POST['civil']."'
+)");
+
+header("Location: employees_masterlist.php");
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Employee Info</title>
-    <style>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Employee</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+
+/* ===== NAVBAR STYLE ===== */
+body {margin:0;font-family:Arial;background:#e9ecef;}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 17px;    
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+  cursor:pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.topnav a:hover, .dropdown:hover .dropbtn {
+  background-color: #555;
+  color: white;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* ===== FORM STYLE ===== */
+.container {
+  display:flex;
+  justify-content:center;
+  margin-top:20px;
+}
+
 form {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
+  width: 400px;
 }
 
-label {display: block;}
+h2 {
+  text-align: center;
+}
 
-input[type=text], input[type=email], select {
+input[type=text],
+select {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
-  display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
@@ -37,147 +162,101 @@ input[type=submit] {
 input[type=submit]:hover {
   background-color: #45a049;
 }
+
 </style>
-  </head>
-<?php
-include("../webconnect.php");
+</head>
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Submit'])) {
-    // Only run this code when the form is submitted via POST.
-    // Sanitize all expected POST inputs in a single loop.
-    $fields = [
-        'employeenumber' => 'emp_number',
-        'firstname' => 'firstname',
-        'mname' => 'mname',
-        'lastname' => 'lname',
-        'address' => 'address',
-        'gender' => 'gender',
-        'emp_status' => 'employment_status',
-        'position' => 'position',
-        'sss' => 'sss',
-        'philhealth' => 'philhealth',
-        'tin' => 'tin',
-        'pagibig' => 'pagibig',
-        'taxcategory' => 'taxcategory',
-        'salary' => 'salary',
-        'rateperday' => 'rateperday',
-        'cnum' => 'cnum',
-        'email' => 'email',
-        'department' => 'department',
-        'civil_status' => 'civil_status',
-    ];
-
-    foreach ($fields as $inputName => $varName) {
-        ${$varName} = mysqli_real_escape_string($conn, $_POST[$inputName] ?? '');
-    }
-
-    $photo = '';
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
-        $target_dir = "uploads/employees/";
-        if (!file_exists($target_dir)) {
-            mkdir($target_dir, 0777, true);
-        }
-        $photo_name = basename($_FILES["photo"]["name"]);
-        $target_file = $target_dir . uniqid() . '_' . $photo_name;
-        if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-            $photo = $target_file;
-        }
-    }
-
-    $sql2 = "SELECT * FROM employees WHERE emp_num = '$emp_number' AND fname = '$firstname' AND mname = '$mname' AND lname = '$lname' AND address = '$address' AND gender = '$gender' AND employment_status = '$employment_status' AND position = '$position' AND sss = '$sss' AND philhealth = '$philhealth' AND tin = '$tin' AND pagibig = '$pagibig' AND taxcategory = '$taxcategory' AND salary = '$salary' AND rateperday = '$rateperday' AND cnum = '$cnum' AND email = '$email' AND department = '$department' AND civil_status = '$civil_status'";
-    $result = mysqli_query($conn, $sql2);
-    $count = $result ? mysqli_num_rows($result) : 0;
-
-    if ($count == 0) {
-        $sql = "INSERT INTO employees (emp_num, fname, mname, lname, address, gender, employment_status, position, sss, philhealth, tin, pagibig, taxcategory, salary, rateperday, photo, cnum, email, department, civil_status) VALUES ('$emp_number','$firstname','$mname','$lname','$address','$gender','$employment_status','$position','$sss','$philhealth','$tin','$pagibig','$taxcategory','$salary','$rateperday','$photo','$cnum','$email','$department','$civil_status')";
-        if (mysqli_query($conn, $sql)) {
-            echo '<script>alert("Employee details has been successfully added!"); location.href="../index.php";</script>';
-            exit;
-        }
-
-        $error = mysqli_error($conn);
-        echo '<script>alert("Unable to save employee details: '.addslashes($error).'");</script>';
-    } else {
-        echo '<script>alert("Record already exists. Please try again!"); location.href="addemployee.php";</script>';
-        exit;
-    }
-}
-?>
 <body>
-<?php include("../mainmenu.php"); ?>
-    <div class="container">
-      <form name="myform" method="POST" action="" enctype="multipart/form-data">
-      <label for="header"><h2>Add Employee Details</h2></label>
 
-        <label for="employeenumber">Employee Number</label>
-        <input type="text" id="employeenumber" name="employeenumber" placeholder="Employee Number" required>
 
-        <label for="firstname">First Name</label>
-        <input type="text" id="firstname" name="firstname" placeholder="First Name" required>
+<div class="topnav" id="myTopnav">
+  <a href="index.php" class="active">Home</a>
 
-        <label for="mname">Middle Name</label>
-        <input type="text" id="mname" name="mname" placeholder="Middle Name">
+  <div class="dropdown">
+    <button class="dropbtn">Points of Sales <i class="fa fa-caret-down"></i></button>
+    <div class="dropdown-content">
+      <a href="cash_register.php">Cash Register</a>
+      <a href="sales_masterlist.php">Sales Masterlist</a>
+    </div>
+  </div> 
 
-        <label for="lastname">Last Name</label>
-        <input type="text" id="lastname" name="lastname" placeholder="Last Name" required>
+  <div class="dropdown">
+    <button class="dropbtn">Inventory Sys <i class="fa fa-caret-down"></i></button>
+    <div class="dropdown-content">
+      <a href="#">Add Products</a>
+      <a href="#">Products Masterlist</a>
+    </div>
+  </div> 
 
-        <label for="address">Address</label>
-        <input type="text" id="address" name="address" placeholder="Address">
+  <div class="dropdown">
+    <button class="dropbtn">Payroll Sys <i class="fa fa-caret-down"></i></button>
+    <div class="dropdown-content">
+      <a href="#">Prepare Payroll</a>
+      <a href="#">Payroll Reports</a>
+      <a href="time_logs.php">Time Logs</a>
+    </div>
+  </div> 
 
-        <label for="gender">Gender</label>
-        <select id="gender" name="gender">
-          <option value="">Select gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
+  <div class="dropdown">
+    <button class="dropbtn">Attendance Sys <i class="fa fa-caret-down"></i></button>
+    <div class="dropdown-content">
+      <a href="addemployee.php">Add Employee</a>
+      <a href="employees_masterlist.php">Employee Masterlist</a>
+    </div>
+  </div> 
 
-        <label for="emp_status">Employment Status</label>
-        <input type="text" id="emp_status" name="emp_status" placeholder="Employment Status">
+  <div class="dropdown">
+    <button class="dropbtn">HR Sys <i class="fa fa-caret-down"></i></button>
+    <div class="dropdown-content">
+      <a href="addemployee.php">Add Employee</a>
+      <a href="employees_masterlist.php">Employee Masterlist</a>
+    </div>
+  </div>   
 
-        <label for="position">Position</label>
-        <input type="text" id="position" name="position" placeholder="Position">
+  <a href="about.php">About</a>
+</div>
 
-        <label for="sss">SSS Number</label>
-        <input type="text" id="sss" name="sss" placeholder="SSS Number">
 
-        <label for="philhealth">PhilHealth Number</label>
-        <input type="text" id="philhealth" name="philhealth" placeholder="PhilHealth Number">
+<div class="container">
+<form method="POST">
+<h2>Add Employee</h2>
 
-        <label for="tin">TIN Number</label>
-        <input type="text" id="tin" name="tin" placeholder="TIN Number">
+<input type="text" name="qr" placeholder="QR Code">
+<input type="text" name="emp" placeholder="Employee Number" required>
 
-        <label for="pagibig">Pag-IBIG Number</label>
-        <input type="text" id="pagibig" name="pagibig" placeholder="Pag-IBIG Number">
+<input type="text" name="fname" placeholder="First Name">
+<input type="text" name="mname" placeholder="Middle Name">
+<input type="text" name="lname" placeholder="Last Name">
 
-        <label for="taxcategory">Tax Category</label>
-        <input type="text" id="taxcategory" name="taxcategory" placeholder="Tax Category">
+<input type="text" name="address" placeholder="Address">
 
-        <label for="salary">Salary</label>
-        <input type="text" id="salary" name="salary" placeholder="Salary">
+<select name="gender">
+<option>Male</option>
+<option>Female</option>
+</select>
 
-        <label for="rateperday">Rate Per Day</label>
-        <input type="text" id="rateperday" name="rateperday" placeholder="Rate Per Day">
+<input type="text" name="status" placeholder="Employment Status">
+<input type="text" name="position" placeholder="Position">
 
-        <label for="cnum">Contact Number</label>
-        <input type="text" id="cnum" name="cnum" placeholder="Contact Number">
+<input type="text" name="sss" placeholder="SSS">
+<input type="text" name="philhealth" placeholder="PhilHealth">
+<input type="text" name="tin" placeholder="TIN">
+<input type="text" name="pagibig" placeholder="Pag-IBIG">
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Email">
+<input type="text" name="tax" placeholder="Tax Category">
+<input type="text" name="salary" placeholder="Salary">
 
-        <label for="department">Department</label>
-        <input type="text" id="department" name="department" placeholder="Department">
+<input type="text" name="photo" placeholder="Photo filename">
 
-        <label for="photo">Employee Photo</label>
-        <input type="file" id="photo" name="photo" accept="image/*">
+<input type="text" name="cnum" placeholder="Contact Number">
+<input type="text" name="email" placeholder="Email">
 
-        <label for="civil_status">Civil Status</label>
-        <input type="text" id="civil_status" name="civil_status" placeholder="Civil Status">
+<input type="text" name="department" placeholder="Department">
+<input type="text" name="civil" placeholder="Civil Status">
 
-        <input type="submit" name="Submit" value="Submit">
-      </form>
-        <center>
-         <div class="signup-link"><a href="../Attendance/time_logs.php">Time Logs</a> | &nbsp;<a href="../index.php">Home</a></div>
-        </center>
-     </div>
-  </body>
+<input type="submit" name="save" value="Save Employee">
+</form>
+</div>
+
+</body>
 </html>
