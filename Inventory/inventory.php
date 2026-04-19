@@ -132,7 +132,9 @@
               <th>Name</th>
               <th>Qty</th>
               <th>Price</th>
-              <th>Category</th>
+
+              <th>Brand</th>
+
               <th>Photo</th>
               <th>Actions</th>
             </tr>
@@ -155,7 +157,8 @@ $stock_qty = (int)$row['quantity'];
                 ?>
               </td>
               <td>₱<?php echo htmlspecialchars($row['price']); ?></td>
-              <td><?php echo htmlspecialchars($row['lastname']); ?></td>
+              <td><?php echo htmlspecialchars($row['productbrand'] ?? $row['lastname'] ?: 'N/A'); ?></td>
+
               <td>
                 <?php if (isset($row['photo']) && !empty($row['photo']) && file_exists($row['photo'])): ?>
                   <img src="<?php echo htmlspecialchars($row['photo']); ?>" alt="Product Photo" style="width: 50px; height: 50px; object-fit: cover;">
