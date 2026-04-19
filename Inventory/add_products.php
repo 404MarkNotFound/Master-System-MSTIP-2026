@@ -41,7 +41,7 @@ input[type=submit]:hover {background-color: #45a049;}
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include("../webconnect.php");
+include("webconnect.php");
 
 // Explicit connection check to prevent null $conn
 if (!isset($conn) || $conn === null || !$conn) {
@@ -94,7 +94,7 @@ if(isset($_POST['Submit']) && $conn) {
         $insert_stmt = $conn->prepare("INSERT INTO products (productnumber, productname, productbrand, price, quantity, productstatus, photo) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $insert_stmt->bind_param("sssdiss", $productnumber, $productname, $productbrand, $price, $quantity, $productstatus, $photo);
         if($insert_stmt->execute()) {
-          echo "<script>alert('Product added successfully! ID: " . $insert_stmt->insert_id . "'); window.location='products_masterlist_fixed.php';</script>";
+echo "<script>alert('Product added successfully! ID: " . $insert_stmt->insert_id . "'); window.location='inventory.php';</script>";
           exit;
         } else {
           $message = "Insert Error: " . $conn->error;
@@ -108,7 +108,7 @@ if(isset($_POST['Submit']) && $conn) {
 }
 ?>
 
-<?php include("../mainmenu.php"); ?>
+<?php include("mainmenu.php"); ?>
 
 <div class="container">
   <?php if($message): ?>
@@ -148,7 +148,7 @@ if(isset($_POST['Submit']) && $conn) {
   </form>
   
   <div style="text-align: center; margin-top: 20px;">
-    <a href="products_masterlist_fixed.php">View Products</a> | <a href="inventory.php">Inventory</a> | <a href="index.php">Home</a>
+    <a href="inventory.php">View Products</a> | <a href="index.php">Home</a>
   </div>
 </div>
 
