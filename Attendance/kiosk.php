@@ -1,4 +1,12 @@
-<!DOCTYPE html>
+<?php 
+date_default_timezone_set('Asia/Manila');
+?>
+<!DOCTYPE html></xai:function_call >  
+<xai:function_call name="edit_file">
+<parameter name="path">
+</xai:function_call >  
+<xai:function_call name="edit_file">
+<parameter name="path">
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -15,36 +23,50 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #FFFFFF;
-  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-family: Verdana, Arial, Helvetica, sans-serif, Times New Roman;
+  position: relative;
 }
 
-h2 { margin: 20px 0 30px 0; font-size: 2.5em; }
+h2 { 
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.5em; 
+}
 
 #liveclock {
-  font-size: 2.2em;
+  position: absolute;
+top: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5em;
   font-weight: bold;
-  margin: 20px 0;
+  font: Times New Roman;
   color: #070707;
 }
 
 form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 220%;
   max-width: 400px;
-  background: #f2f2f2;
-  padding: 40px;
+  background: #F2F2F2;
+  padding: 70px;
   border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  box-sizing: border-box;
 }
 
 label { display:block; margin-top:10px; font-weight:bold; }
 
 input[type=text], input[type=password] {
-  width: 100%;
+  width: 93%;
   padding: 10px;
   margin-top: 5px;
+  border: 1px solid #ccc;
 }
 
 .btn-row { display:flex; gap:10px; margin-top:15px; }
@@ -61,7 +83,11 @@ input[type=submit] {
 #btnTimeOut { background:#2196F3; }
 
 .msg-box {
-  margin: 20px auto;
+  position: absolute;
+  bottom: 150px;
+  left: 47%;
+  transform: translateX(-30%);
+  margin: 10;
   padding: 10px;
   display: inline-block;
 }
@@ -155,7 +181,7 @@ $now = date('Y-m-d H:i:s');
 }
 ?>
 
-<h2>Attendance System</h2>
+<h2>ATTENDANCE SYSTEM</h2>
 
 <div id="liveclock"></div>
 
