@@ -1,6 +1,6 @@
 <?php
 @session_start();
-include("webconnect.php");
+include("../webconnect.php");
 
 // Get filter values
 $payrollMonth = isset($_POST['payroll_month']) ? $_POST['payroll_month'] : date('Y-m');
