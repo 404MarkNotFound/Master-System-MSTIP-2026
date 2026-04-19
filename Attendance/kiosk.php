@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $emp['fname'] . " " . $emp['lname'];
 
     $today = date('Y-m-d');
-    $now = date('H:i:s');
+$now = date('Y-m-d H:i:s');
 
     $check = "SELECT * FROM attendance_logs WHERE emp_num='$emp_num' AND log_date='$today'";
     $check_res = mysqli_query($conn, $check);

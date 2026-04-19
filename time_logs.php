@@ -37,7 +37,7 @@ tr:nth-child(odd)  { background-color: #DDE0EE; }
 
 <?php
 session_start();
-include("../webconnect.php");
+include("webconnect.php");
 
 if (!isset($conn)) {
   die("Database connection not found.");
@@ -50,7 +50,7 @@ if (!$result) {
   die("Query failed: " . mysqli_error($conn));
 }
 
-include("../mainmenu.php");
+include("mainmenu.php");
 ?>
 
 <div style="text-align:center; margin:20px;">
