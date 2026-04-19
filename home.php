@@ -1,1 +1,1 @@
-<?php include("mainmenu.php"); ?>
+<?php include("../mainmenu.php"); ?>
