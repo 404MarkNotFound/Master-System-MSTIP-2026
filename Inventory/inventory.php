@@ -33,13 +33,13 @@
 
   </head>
   <body>
-    <?php include("../mainmenu.php"); ?>
+    <?php include("mainmenu.php"); ?>
     <div class="container">
       <div class="wrapper">
         <div class="title"><span>Inventory Management</span></div>
         
         <?php
-        include("../webconnect.php");
+        include("webconnect.php");
         
         // Handle Delete
         if (isset($_POST['action']) && $_POST['action'] == 'delete') {
@@ -133,6 +133,7 @@
               <th>Qty</th>
               <th>Price</th>
               <th>Category</th>
+              <th>Photo</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -143,7 +144,7 @@
               <td><?php echo htmlspecialchars($row['productname']); ?></td>
               <td>
                 <?php 
-                $stock_qty = (int)$row['qty'];
+$stock_qty = (int)$row['quantity'];
                 if ($stock_qty == 0) {
                     echo '<span class="stock-out">Out of Stock</span>';
                 } elseif ($stock_qty < 20) {
@@ -153,14 +154,21 @@
                 }
                 ?>
               </td>
-              <td>$<?php echo htmlspecialchars($row['price']); ?></td>
+              <td>₱<?php echo htmlspecialchars($row['price']); ?></td>
               <td><?php echo htmlspecialchars($row['lastname']); ?></td>
+              <td>
+                <?php if (isset($row['photo']) && !empty($row['photo']) && file_exists($row['photo'])): ?>
+                  <img src="<?php echo htmlspecialchars($row['photo']); ?>" alt="Product Photo" style="width: 50px; height: 50px; object-fit: cover;">
+                <?php else: ?>
+                  <span>No Photo</span>
+                <?php endif; ?>
+              </td>
               <td>
                 <!-- Update Form -->
                 <form method="post" class="action-form" style="display: inline;">
                   <input type="hidden" name="action" value="update">
                   <input type="hidden" name="productNumber" value="<?php echo $row['productnumber']; ?>">
-                  Qty: <input type="number" class="edit-input" name="qty" value="<?php echo $row['qty']; ?>" required>
+                  Qty: <input type="number" class="edit-input" name="qty" value="<?php echo $row['quantity']; ?>" required> 
                   Price: <input type="number" step="0.01" class="edit-input" name="price" value="<?php echo $row['price']; ?>" required>
                   <button type="submit" class="update-btn">Update</button>
                 </form>
