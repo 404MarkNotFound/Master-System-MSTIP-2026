@@ -141,7 +141,7 @@ body {margin:0;font-family:Arial}
     </button>
     <div class="dropdown-content">
       <a href="#">Prepare Payroll</a>
-      <a href="#">Payroll Reports</a>
+      <a href="payroll_reports.php">Payroll Reports</a>
       <a href="time_logs.php">Time Logs</a>
     </div>
   </div> 
