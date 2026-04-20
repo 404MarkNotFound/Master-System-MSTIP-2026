@@ -118,7 +118,7 @@ if(isset($_POST['btnSearch22']))
     <td width="10%" align="left" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" >&nbsp;<?php echo $row4['mname']; ?></td>
     <td width="22%" colspan="2" bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['department']; ?></span></td>
     <td width="14%" bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['email']; ?></span></td>
-    <td width="8%" align="center" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" ><a href="delete.php?empid=<?php echo $row4['id']; ?>"><img src="delete.png" width="22" height="24" title="Delete"></a>&nbsp;<a href="update.php?id=<?php echo $row4['id']; ?>" title="Edit"><img src="update.png" width="22" height="24"></a></td>
+    <td width="8%" align="center" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" ><a href="delete.php?empid=<?php echo $row4['id']; ?>"><img src="delete.png" width="22" height="24" title="Delete"></a>&nbsp;<a href="hr_update.php?id=<?php echo $row4['id']; ?>" title="Edit"><img src="update.png" width="22" height="24"></a></td>
     </tr>
  <?php } ?> 
 </table>
