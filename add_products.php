@@ -57,9 +57,8 @@ if(isset($_POST['Submit']) && $conn) {
   $productbrand = trim($_POST['productbrand'] ?? '');
   $price = floatval($_POST['price'] ?? 0);
   $quantity = intval($_POST['quantity'] ?? 0);
-  $productstatus = trim($_POST['productstatus'] ?? '');
 
-  if (empty($productnumber) || empty($productname) || empty($productbrand) || $price <= 0 || $quantity < 0 || empty($productstatus)) {
+  if (empty($productnumber) || empty($productname) || empty($productbrand) || $price <= 0 || $quantity < 0) {
     $message = "All fields are required and valid.";
   } else {
     // Use prepared statement to avoid escape_string issues and injection
@@ -91,8 +90,8 @@ if(isset($_POST['Submit']) && $conn) {
       }
 
       if (empty($message)) {
-        $insert_stmt = $conn->prepare("INSERT INTO products (productnumber, productname, productbrand, price, quantity, productstatus, photo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $insert_stmt->bind_param("sssdiss", $productnumber, $productname, $productbrand, $price, $quantity, $productstatus, $photo);
+        $insert_stmt = $conn->prepare("INSERT INTO products (productnumber, productname, productbrand, price, quantity, photo) VALUES (?, ?, ?, ?, ?, ?)");
+        $insert_stmt->bind_param("sssdis", $productnumber, $productname, $productbrand, $price, $quantity, $photo);
         if($insert_stmt->execute()) {
 echo "<script>alert('Product added successfully! ID: " . $insert_stmt->insert_id . "'); window.location='inventory.php';</script>";
           exit;
@@ -134,13 +133,6 @@ echo "<script>alert('Product added successfully! ID: " . $insert_stmt->insert_id
     <label for="quantity">Quantity *</label>
     <input type="number" min="0" id="quantity" name="quantity" value="<?php echo htmlspecialchars($_POST['quantity'] ?? ''); ?>" required>
 
-    <label for="productstatus">Product Status *</label>
-    <select name="productstatus" required>
-      <option value="Active">Active</option>
-      <option value="Inactive">Inactive</option>
-      <option value="Out of Stock">Out of Stock</option>
-    </select>
-
     <label for="photo">Product Photo (optional)</label>
     <input type="file" id="photo" name="photo" accept="image/*">
 
@@ -154,4 +146,3 @@ echo "<script>alert('Product added successfully! ID: " . $insert_stmt->insert_id
 
 </body>
 </html>
-
