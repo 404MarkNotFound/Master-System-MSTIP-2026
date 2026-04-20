@@ -132,7 +132,7 @@ body {margin:0;font-family:Arial}
     <div class="dropdown-content">
       <a href="add_products.php">Add Products</a>
       <a href="inventory.php">Products Masterlist</a>
-      <a href="#">Link 3</a>
+      <a href="time_logs.php">Time Logs</a>
     </div>
   </div> 
    <div class="dropdown">
