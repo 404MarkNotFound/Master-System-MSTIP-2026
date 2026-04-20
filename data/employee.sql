@@ -1,35 +1,11 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Apr 16, 2026 at 06:12 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `enterprise_architecture`
---
-CREATE DATABASE IF NOT EXISTS `master_system` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
+-- phpMyAdmin SQL Dump for master_system DB
+DROP DATABASE IF EXISTS `master_system`;
+CREATE DATABASE `master_system` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
 USE `master_system`;
 
--- --------------------------------------------------------
-
---
 -- Table structure for table `employees`
---
-
-DROP TABLE IF EXISTS `employees`;\nCREATE TABLE `employees` (
+DROP TABLE IF EXISTS `employees`;
+CREATE TABLE `employees` (
   `id` int(5) NOT NULL,
   `emp_num` varchar(50) NOT NULL,
   `fname` varchar(35) NOT NULL,
@@ -53,10 +29,7 @@ DROP TABLE IF EXISTS `employees`;\nCREATE TABLE `employees` (
   `civil_status` varchar(30) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
---
--- Dumping data for table `employees`
---
-
+-- Full sample data
 INSERT INTO `employees` (`id`, `emp_num`, `fname`, `mname`, `lname`, `address`, `gender`, `employment_status`, `position`, `sss`, `philhealth`, `tin`, `pagibig`, `taxcategory`, `salary`, `rateperday`, `photo`, `cnum`, `email`, `department`, `civil_status`) VALUES
 (116, '2021-098', 'ABEGAIL', '', 'PASIA', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'pasia.webp', '', 'abegail.pasia@pcaat.edu.ph', 'FACULTY/TVL/PART-TIME', ''),
 (118, '2021-003', 'AILA MARIE', '', 'BATA-ANON', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'bata-anon.webp', '', 'ailamarie.bata-anon@pcaat.edu.ph', 'FACULTY/RESEARCH AND SOCIAL SCIENCES', ''),
@@ -78,7 +51,7 @@ INSERT INTO `employees` (`id`, `emp_num`, `fname`, `mname`, `lname`, `address`, 
 (160, '2021-033', 'MA. FILIPINA', '', 'GARCIA', '', 'Female', '', 'Business Development Officer', '', '', '', '', '', 0, 0, '', '', 'filipina.garcia@pcaat.edu.ph', 'Business Development Officer', ''),
 (170, '2021-001', 'IDELFONSO', 'L.', 'DATU', '', 'Male', '', 'VP for Admin and Finance', '', '', '', '', '', 0, 0, 'ideldatu.webp', '', 'idel.datu@pcaat.edu.ph', 'Vice President for Administration and Finance', ''),
 (171, '2021-012', 'IRIS', '', 'FRANI', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'frani.webp', '', 'iris.frani@pcaat.edu.ph', 'FACULTY/RESEARCH AND SOCIAL SCIENCES', ''),
-(180, '2021-096', 'JOSE ARIEL', 'P', 'CLEMENTE', 'Sta. Cruz, Manila', 'Male', '', 'IT Staff', '', '', '', '', 'B', 24000, 0, 'clemente.webp', '', 'jose.clemente@pcaat.edu.ph', 'FACULTY/TECHNICAL-VOCATIONAL-LIVELIHOOD', 'SIngle'),
+(180, '2021-096', 'JOSE ARIEL', 'P', 'CLEMENTE', 'Sta. Cruz, Manila', 'Male', '', 'IT Staff', '', '', '', '', 'B', 24000, 0, 'clemente.webp', '', 'jose.clemente@pcaat.edu.ph', 'FACULTY/TECHNICAL-VOCATIONAL-LIVELIHOOD', 'Single'),
 (183, '2021-007', 'JUDY', 'G.', 'SIBAYAN', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'sibayan.webp', '', 'judy.sibayan@pcaat.edu.ph', 'FACULTY/RESEARCH AND SOCIAL SCIENCES', ''),
 (193, '2021-018', 'KYLA MARIE', '', 'PASTORAL', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'pastoral.webp', '', 'kyla.pastoral@pcaat.edu.ph', 'FACULTY/TECHNICAL-VOCATIONAL-LIVELIHOOD', ''),
 (201, '2021-005', 'MAI NICOLE', 'R.', 'OLAGUER', '', 'Female', '', 'Asst. Principal', '', '', '', '', '', 0, 0, 'olaguer.webp', '', 'mai.olaguer@pcaat.edu.ph', 'ASSISTANT PRINCIPAL', ''),
@@ -87,11 +60,11 @@ INSERT INTO `employees` (`id`, `emp_num`, `fname`, `mname`, `lname`, `address`, 
 (223, '2021-028', 'PEARL ANGELETTE', '', 'MARIANO', '', 'Female', '', 'HRD Head', '', '', '', '', '', 0, 0, 'pearlmariano.webp', '', 'pearl.mariano@pcaat.edu.ph', 'Head, HRD/ OIC, Marketing Director', ''),
 (224, '2021-001', 'PERLITA', '', 'DATU', '', 'Female', '', 'Consultant', '', '', '', '', '', 0, 0, '', '', 'perlita.datu@pcaat.edu.ph', 'Internal and External Consultant', ''),
 (226, '2021-027', 'PHOEBE', '', 'CLAROS', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'claros.webp', '', 'phoebe.claros@pcaat.edu.ph', 'FACULTY/LANGUAGES AND LITERATURE', ''),
-(227, '2021-040', 'PRINCESS DIANE', '', 'DE GUIA', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'dequia.webp', '', 'princess.deguia@pcaat.edu.ph', 'FACULTY/TECHNICAL-VOCATIONAL-LIVELIHOOD', ''),
+(227, '2021-040', 'PRINCESS DIANE', '', 'DE GUIA', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'deguia.webp', '', 'princess.deguia@pcaat.edu.ph', 'FACULTY/TECHNICAL-VOCATIONAL-LIVELIHOOD', ''),
 (229, '2021-029', 'PSALM', 'DANIEL', 'CAGUIA', '', 'Female', '', 'Registrar Staff', '', '', '', '', '', 0, 0, 'caguia.webp', '', 'psalm.caguia@pcaat.edu.ph', 'Registrar staff', ''),
 (230, '2021-024', 'REXEL IAN', '', 'REYES', '', 'Male', '', 'IT Staff', '', '', '', '', '', 0, 0, 'reyes.webp', '', 'rexel.reyes@pcaat.edu.ph', 'IT Staff', ''),
 (236, '2021-026', 'RICKARDO', '', 'SANTIAGO', '', 'Male', '', '', '', '', '', '', '', 0, 0, '', '', 'rickardo.santiago@pcaat.edu.ph', 'REGISTRAR Staff', ''),
-(237, '2021-032', 'ROBERT JEROME', 'J.', 'DE VERA', '', 'Male', '', 'Faculty', '', '', '', '', '', 0, 0, 'devera.webp', '', 'robert.devera@pcaat.edu.ph', 'FACULTY/RESEARCH AND SOCIAL SCIENCES', ''),
+(237, '2021-032', 'ROBERT JERME', 'J.', 'DE VERA', '', 'Male', '', 'Faculty', '', '', '', '', '', 0, 0, 'devera.webp', '', 'robert.devera@pcaat.edu.ph', 'FACULTY/RESEARCH AND SOCIAL SCIENCES', ''),
 (238, '2021-011', 'ROCELINE', 'P.', 'SORIQUEZ', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'soriquez.webp', '', 'roceline.soriquez@pcaat.edu.ph', 'FACULTY/TECHNICAL-VOCATIONAL-LIVELIHOOD', ''),
 (239, '2021-099', 'ROCHELLE ANN', '', 'PANA', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'pana.webp', '', 'rochell.pana@pcaat.edu.ph', 'FACULTY/BUSINESS AND SCIENCE', ''),
 (245, '2021-033', 'ROWENA', '', 'GARCIA', '', 'Female', '', '', '', '', '', '', '', 0, 0, '', '', 'rowena.garcia@pcaat.edu.ph', 'Part time, Registrar Staff', ''),
@@ -101,27 +74,5 @@ INSERT INTO `employees` (`id`, `emp_num`, `fname`, `mname`, `lname`, `address`, 
 (250, '2021-004', 'SHERINA', '', 'VILLANUEVA', '', 'Female', '', 'Department Head', '', '', '', '', '', 0, 0, 'villanueva.webp', '', 'sherina.villanueva@pcaat.edu.ph', 'Dep. Head, Language and Literature', ''),
 (252, '2021-020', 'VANESSA MAE', '', 'OJEDA', '', 'Female', '', 'Faculty', '', '', '', '', '', 0, 0, 'ojeda.webp', '', 'vanessamae.ojeda@pcaat.edu.ph', 'FACULTY/RESEARCH AND SOCIAL SCIENCES', '');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `employees`
---
-ALTER TABLE `employees`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `employees`
---
-ALTER TABLE `employees`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=264;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+ALTER TABLE `employees` ADD PRIMARY KEY (`id`);
+ALTER TABLE `employees` MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=264;
