@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `enterprise_architecture`
 --
-CREATE DATABASE IF NOT EXISTS `enterprise_architecture` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
-USE `enterprise_architecture`;
+CREATE DATABASE IF NOT EXISTS `master_system` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
+USE `master_system`;
 
 -- --------------------------------------------------------
 
@@ -29,7 +29,7 @@ USE `enterprise_architecture`;
 -- Table structure for table `employees`
 --
 
-CREATE TABLE `employees` (
+DROP TABLE IF EXISTS `employees`;\nCREATE TABLE `employees` (
   `id` int(5) NOT NULL,
   `emp_num` varchar(50) NOT NULL,
   `fname` varchar(35) NOT NULL,
