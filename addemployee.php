@@ -3,12 +3,42 @@ include("webconnect.php");
 
 if(isset($_POST['save'])){
 
-mysqli_query($conn,"INSERT INTO employees (
-qr_code, emp_num, fname, mname, lname, address, gender,
+$photo = '';
+if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+$target_dir = "uploads/employees/";
+if (!file_exists($target_dir)) {
+mkdir($target_dir, 0777, true);
+}
+$photo_name = basename($_FILES["photo"]["name"]);
+$photo_ext = strtolower(pathinfo($photo_name, PATHINFO_EXTENSION));
+if (in_array($photo_ext, ['jpg','jpeg','png','gif'])) {
+$image_info = getimagesize($_FILES["photo"]["tmp_name"]);
+if ($image_info !== false) {
+$width = $image_info[0];
+$height = $image_info[1];
+if ($width === $height) {
+$target_file = $target_dir . uniqid() . '_' . $_POST['emp'] . '.' . $photo_ext;
+if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+$photo = $target_file;
+} else {
+$message = "File upload failed.";
+}
+} else {
+$message = "Photo must be square (1:1 aspect ratio).";
+}
+} else {
+$message = "Invalid image file.";
+}
+} else {
+$message = "Invalid file type. Only JPG, PNG, GIF allowed.";
+}
+}
+
+if (empty($message)) {
+mysqli_query($conn,"INSERT INTO employees (emp_num, fname, mname, lname, address, gender,
 employment_status, position, sss, philhealth, tin, pagibig,
 taxcategory, salary, photo, cnum, email, department, civil_status
 ) VALUES (
-'".$_POST['qr']."',
 '".$_POST['emp']."',
 '".$_POST['fname']."',
 '".$_POST['mname']."',
@@ -23,7 +53,7 @@ taxcategory, salary, photo, cnum, email, department, civil_status
 '".$_POST['pagibig']."',
 '".$_POST['tax']."',
 '".$_POST['salary']."',
-'".$_POST['photo']."',
+'".$photo."',
 '".$_POST['cnum']."',
 '".$_POST['email']."',
 '".$_POST['department']."',
@@ -31,6 +61,9 @@ taxcategory, salary, photo, cnum, email, department, civil_status
 )");
 
 header("Location: employees_masterlist.php");
+} else {
+    echo $message;
+}
 }
 ?>
 
@@ -139,6 +172,7 @@ h2 {
 }
 
 input[type=text],
+input[type=file],
 select {
   width: 100%;
   padding: 12px;
@@ -163,65 +197,12 @@ input[type=submit]:hover {
   background-color: #45a049;
 }
 
-</style>
-</head>
-
-<body>
-
-
-<div class="topnav" id="myTopnav">
-  <a href="index.php" class="active">Home</a>
-
-  <div class="dropdown">
-    <button class="dropbtn">Points of Sales <i class="fa fa-caret-down"></i></button>
-    <div class="dropdown-content">
-      <a href="cash_register.php">Cash Register</a>
-      <a href="sales_masterlist.php">Sales Masterlist</a>
-    </div>
-  </div> 
-
-  <div class="dropdown">
-    <button class="dropbtn">Inventory Sys <i class="fa fa-caret-down"></i></button>
-    <div class="dropdown-content">
-      <a href="#">Add Products</a>
-      <a href="#">Products Masterlist</a>
-    </div>
-  </div> 
-
-  <div class="dropdown">
-    <button class="dropbtn">Payroll Sys <i class="fa fa-caret-down"></i></button>
-    <div class="dropdown-content">
-      <a href="#">Prepare Payroll</a>
-      <a href="#">Payroll Reports</a>
-      <a href="time_logs.php">Time Logs</a>
-    </div>
-  </div> 
-
-  <div class="dropdown">
-    <button class="dropbtn">Attendance Sys <i class="fa fa-caret-down"></i></button>
-    <div class="dropdown-content">
-      <a href="addemployee.php">Add Employee</a>
-      <a href="employees_masterlist.php">Employee Masterlist</a>
-    </div>
-  </div> 
-
-  <div class="dropdown">
-    <button class="dropbtn">HR Sys <i class="fa fa-caret-down"></i></button>
-    <div class="dropdown-content">
-      <a href="addemployee.php">Add Employee</a>
-      <a href="employees_masterlist.php">Employee Masterlist</a>
-    </div>
-  </div>   
-
-  <a href="about.php">About</a>
-</div>
-
+<?php include("mainmenu.php"); ?>
 
 <div class="container">
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
 <h2>Add Employee</h2>
 
-<input type="text" name="qr" placeholder="QR Code">
 <input type="text" name="emp" placeholder="Employee Number" required>
 
 <input type="text" name="fname" placeholder="First Name">
@@ -246,13 +227,14 @@ input[type=submit]:hover {
 <input type="text" name="tax" placeholder="Tax Category">
 <input type="text" name="salary" placeholder="Salary">
 
-<input type="text" name="photo" placeholder="Photo filename">
-
 <input type="text" name="cnum" placeholder="Contact Number">
 <input type="text" name="email" placeholder="Email">
 
 <input type="text" name="department" placeholder="Department">
 <input type="text" name="civil" placeholder="Civil Status">
+
+<label for="photo">1x1 Photo</label>
+<input type="file" id="photo" name="photo" accept="image/">
 
 <input type="submit" name="save" value="Save Employee">
 </form>
