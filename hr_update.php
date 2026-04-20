@@ -242,7 +242,7 @@ input[type=submit]:hover {
   <?php else: ?>
     <div class="no-photo">No Photo</div>
   <?php endif; ?>
-  <label for="photo"><i class="fa fa-camera"></i> Change Photo (any size OK)</label>
+  <label for="photo"><i class="fa fa-camera"></i> Change Photo </label>
   <input type="file" id="photo" name="photo" accept="image/*">
 </div>
 
