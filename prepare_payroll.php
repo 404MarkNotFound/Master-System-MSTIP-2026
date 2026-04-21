@@ -71,9 +71,17 @@ if(isset($_POST['btnPreview']) || isset($_POST['btnProcess'])) {
         $daysWorked = $att['days_worked'] ? $att['days_worked'] : 0;
         $daysAbsent = $totalPeriodDays > 0 ? max($totalPeriodDays - $daysWorked, 0) : 0;
         $lateCount = $att['late_count'] ? $att['late_count'] : 0;
-        $ratePerDay = $emp['rateperday'] ? $emp['rateperday'] : 0;
-        if($ratePerDay <= 0 && !empty($emp['salary'])) {
-            $ratePerDay = $emp['salary'] / 26;
+              // FIX: Get rate with proper fallback
+        $ratePerDay = 0;
+        if(!empty($emp['rateperday']) && $emp['rateperday'] > 0) {
+            $ratePerDay = (float)$emp['rateperday'];
+        } elseif(!empty($emp['salary']) && $emp['salary'] > 0) {
+            $ratePerDay = (float)$emp['salary'] / 26;
+        }
+        
+        // FIX: If still no rate, set minimum or show warning
+        if($ratePerDay <= 0) {
+            $ratePerDay = 500.00; // Default rate - palitan mo kung ano ang standard nyo
         }
         
         // Gross pay
