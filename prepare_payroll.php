@@ -79,7 +79,7 @@ if(isset($_POST['btnPreview']) || isset($_POST['btnProcess'])) {
             $ratePerDay = (float)$emp['salary'] / 26;
         }
         
-        // FIX: If still no rate, set minimum or show warning
+        // FIX: If still no rate set minimum or show warning
         if($ratePerDay <= 0) {
             $ratePerDay = 500.00; // Default rate - palitan mo kung ano ang standard nyo
         }
