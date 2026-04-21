@@ -140,7 +140,7 @@ body {margin:0;font-family:Arial}
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content">
-      <a href="#">Prepare Payroll</a>
+      <a href="prepare_payroll.php">Prepare Payroll</a>
       <a href="payroll_reports.php">Payroll Reports</a>
       <a href="time_logs.php">Time Logs</a>
     </div>
