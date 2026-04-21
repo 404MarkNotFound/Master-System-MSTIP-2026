@@ -151,7 +151,7 @@ body {margin:0;font-family:Arial}
     </button>
     <div class="dropdown-content">
       <a href="addemployee.php">Add Employee</a>
-      <a href="employee_mastelrist">Employee Masterlist</a>
+      <a href="employees_masterlist.php">Employee Masterlist</a>
       <a href="time_logs.php">Time Logs</a>
     </div>
   </div> 
@@ -161,7 +161,7 @@ body {margin:0;font-family:Arial}
     </button>
     <div class="dropdown-content">
       <a href="addemployee.php">Add Employee</a>
-      <a href="employee_mastelrist">Employee Masterlist</a>
+      <a href="employees_masterlist.php">Employee Masterlist</a>
     </div>
   </div> 
   <a href="#">About</a>

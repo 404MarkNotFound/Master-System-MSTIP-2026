@@ -4,6 +4,8 @@ include("webconnect.php");
 if(isset($_POST['save'])){
 
 $photo = '';
+$message = '';
+
 if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
 $target_dir = "uploads/employees/";
 if (!file_exists($target_dir)) {
@@ -12,11 +14,6 @@ mkdir($target_dir, 0777, true);
 $photo_name = basename($_FILES["photo"]["name"]);
 $photo_ext = strtolower(pathinfo($photo_name, PATHINFO_EXTENSION));
 if (in_array($photo_ext, ['jpg','jpeg','png','gif'])) {
-$image_info = getimagesize($_FILES["photo"]["tmp_name"]);
-if ($image_info !== false) {
-$width = $image_info[0];
-$height = $image_info[1];
-if ($width === $height) {
 $target_file = $target_dir . uniqid() . '_' . $_POST['emp'] . '.' . $photo_ext;
 if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
 $photo = $target_file;
@@ -24,15 +21,9 @@ $photo = $target_file;
 $message = "File upload failed.";
 }
 } else {
-$message = "Photo must be square (1:1 aspect ratio).";
-}
-} else {
-$message = "Invalid image file.";
-}
-} else {
 $message = "Invalid file type. Only JPG, PNG, GIF allowed.";
 }
-}
+} 
 
 if (empty($message)) {
 mysqli_query($conn,"INSERT INTO employees (emp_num, fname, mname, lname, address, gender,
@@ -61,8 +52,9 @@ taxcategory, salary, photo, cnum, email, department, civil_status
 )");
 
 header("Location: employees_masterlist.php");
+exit();
 } else {
-    echo $message;
+    $error_message = $message;
 }
 }
 ?>
@@ -196,8 +188,13 @@ input[type=submit] {
 input[type=submit]:hover {
   background-color: #45a049;
 }
+</style>
+</head>
 
+<body>
 <?php include("mainmenu.php"); ?>
+
+<?php if(isset($error_message)) echo "<p style='color:red;text-align:center;'>$error_message</p>"; ?>
 
 <div class="container">
 <form method="POST" enctype="multipart/form-data">
@@ -233,8 +230,8 @@ input[type=submit]:hover {
 <input type="text" name="department" placeholder="Department">
 <input type="text" name="civil" placeholder="Civil Status">
 
-<label for="photo">1x1 Photo</label>
-<input type="file" id="photo" name="photo" accept="image/">
+<label for="photo">Photo</label>
+<input type="file" id="photo" name="photo" accept="image/*">
 
 <input type="submit" name="save" value="Save Employee">
 </form>
@@ -242,3 +239,4 @@ input[type=submit]:hover {
 
 </body>
 </html>
+
