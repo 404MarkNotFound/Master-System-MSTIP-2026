@@ -1,6 +1,4 @@
 -- phpMyAdmin SQL Dump for master_system DB
-DROP DATABASE IF EXISTS `master_system`;
-CREATE DATABASE `master_system` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
 USE `master_system`;
 
 -- Table structure for table `employees`
