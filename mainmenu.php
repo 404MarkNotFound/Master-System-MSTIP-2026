@@ -122,7 +122,7 @@ body {margin:0;font-family:Arial}
     <div class="dropdown-content">
       <a href="cash_register.php">Cash Register</a>
       <a href="sales_masterlist.php">Sales Masterlist</a>
-      <a href="#">Link 3</a>
+      <a href="time_logs.php">Time Logs</a>
     </div>
   </div> 
    <div class="dropdown">
