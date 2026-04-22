@@ -157,7 +157,7 @@ form {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
-  width: 400px;
+  width: 5000px;
 }
 
 h2 {

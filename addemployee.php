@@ -156,7 +156,7 @@ form {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
-  width: 400px;
+  width: 5000px;
 }
 
 h2 {
@@ -234,6 +234,12 @@ input[type=submit]:hover {
 <input type="file" id="photo" name="photo" accept="image/*">
 
 <input type="submit" name="save" value="Save Employee">
+
+ <center>
+         <div class="signup-link"><a href="time_logs.php">Time Logs</a> | &nbsp;<a href="home.php">Home</a></div>
+     </div>
+    </div>|
+
 </form>
 </div>
 

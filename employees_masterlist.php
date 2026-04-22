@@ -124,7 +124,7 @@ if(isset($_POST['btnSearch22']))
 </table>
 </center>
 <br />
-<center><span class="style49 style136"><a href="index.php">MSTIP</a>-Home </span>
+<center><span class="style49 style136"><a href="home.php">MSTIP</a>-Home </span>
 </center>
 </body>
 
