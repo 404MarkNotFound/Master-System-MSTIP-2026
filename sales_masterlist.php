@@ -56,8 +56,8 @@ if(isset($_POST['btnSearch22']))
       <span class="style92">Search by:</span>
       <select name="criteria" id="criteria">
         <option selected="selected">Select</option>
-        <option value="sales_inv">Sales Invoice</option>
-        <option value="product_name">Product Name</option>
+        <option value="sales_invoice">Sales Invoice</option>
+        <option value="productname">Product Name</option>
         <option value="emp_num">Employee Number</option>
       </select>
       <input name="textsearch2" type="text" id="textsearch2" size="28" />
@@ -87,12 +87,12 @@ if(isset($_POST['btnSearch22']))
         }    
  ?>
   <tr>
-    <td height="26" bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['sales_inv']; ?></span></td>
+    <td height="26" bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['sales_invoice']; ?></span></td>
     <td height="26" align="center" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" ><?php echo $row4['sales_date']; ?></td>
-    <td bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['product_name']; ?></span></td>
+    <td bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['productname']; ?></span></td>
     <td bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['quantity']; ?></span></td>
-    <td align="left" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" >&nbsp;<?php echo $row4['unit_price']; ?></td >
-    <td  bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['sub_total']; ?></span></td>
+    <td align="left" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" >&nbsp;<?php echo $row4['price']; ?></td >
+    <td  bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['subtotal']; ?></span></td>
     <td bgcolor="<?php echo $color; ?>" class="style127" ><span class="style138"><?php echo $row4['emp_num']; ?></span></td>
     <td align="center" bgcolor="<?php echo $color; ?>" class="style127 style136 style139" ><a href="update_memo.php?id=<?php echo $row4['id']; ?>"><img src="buttons/pclip2.jpg" width="27" height="22" /></a></td>
     </tr>
