@@ -60,12 +60,23 @@ $totalGross = 0;
 $totalDeduct = 0;
 $totalNet = 0;
 $payrollData = array();
-
 while ($row = mysqli_fetch_assoc($result)) {  
     $daysWorked = (int)$row['days_worked'];
     $daysAbsent = (int)$row['absent_count'];
     $lateCount = (int)$row['late_count'];
-    $ratePerDay = (float)$row['rateperday'];
+    
+    // FIX: Get rate with proper fallback
+    $ratePerDay = 0;
+    if(!empty($row['rateperday']) && $row['rateperday'] > 0) {
+        $ratePerDay = (float)$row['rateperday'];
+    } elseif(!empty($row['salary']) && $row['salary'] > 0) {
+        $ratePerDay = (float)$row['salary'] / 26;
+    }
+    
+    // FIX: If still no rate, use default
+    if($ratePerDay <= 0) {
+        $ratePerDay = 500.00; // Change this to your standard daily rate
+    }
     
     $grossPay = $daysWorked * $ratePerDay;
     $deductAbsent = $daysAbsent * $ratePerDay;
