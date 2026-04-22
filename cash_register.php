@@ -86,7 +86,7 @@ if(isset($_POST['btnPayment'])) {
                 // DITO ANG ACTUAL DEDUCTION SA MASTERLIST
                 mysqli_query($conn, "UPDATE products SET quantity = quantity - $q_ordered WHERE productnumber = '$p_num'");
 
-                mysqli_query($conn, "INSERT INTO sales (sales_inv, sales_date, product_name, quantity, unit_price, sub_total, emp_num) 
+                mysqli_query($conn, "INSERT INTO sales (sales_invoice, sales_date, productname, quantity, price, subtotal, emp_num) 
                                     VALUES ('$inv_no', NOW(), '{$row['productname']}', '$q_ordered', '{$row['price']}', '{$row['subtotal']}', '$current_emp')");
             }
             mysqli_query($conn, "DELETE FROM cart"); 
