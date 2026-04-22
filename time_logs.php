@@ -43,7 +43,14 @@ if (!isset($conn)) {
   die("Database connection not found.");
 }
 
-$sql = "SELECT * FROM attendance_logs ORDER BY log_date DESC, time_in DESC LIMIT 500";
+$search_emp = isset($_GET['search_emp']) ? trim($_GET['search_emp']) : '';
+
+$sql = "SELECT * FROM attendance_logs";
+if ($search_emp != '') {
+  $search_emp = mysqli_real_escape_string($conn, $search_emp);
+  $sql .= " WHERE emp_num LIKE '%$search_emp%'";
+}
+$sql .= " ORDER BY log_date DESC, time_in DESC LIMIT 500";
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
@@ -53,18 +60,24 @@ if (!$result) {
 include("mainmenu.php");
 ?>
 
-<div style="text-align:center; margin:20px;">
-  <h2>Time Logs</h2>
-  <div id="liveclock"></div>
-</div>
-
-<script>
-function updateClock() {
-  document.getElementById('liveclock').textContent = new Date().toLocaleString();
-}
-updateClock();
-setInterval(updateClock, 1000);
-</script>
+<form method="get" action="" style="margin: 0;">
+<table width="99%" border="0" align="center" cellpadding="2" cellspacing="0">
+  <tr>
+    <td width="35%" height="28" valign="middle" bgcolor="#99CCFF" style="padding: 5px; border: none;">
+      <span style="font-family: Geneva, Arial, Helvetica, sans-serif; font-size: 12px;">
+        Search by:
+        <select style="width: 105px;">
+          <option value="">Select</option>
+        </select>
+        <input type="text" name="search_emp" size="10" value="<?= htmlspecialchars($search_emp); ?>" />
+        <input type="submit" value="GO" />
+        <input type="button" value="All" onclick="window.location='time_logs.php'" />
+      </span>
+    </td>
+    <td width="65%" bgcolor="#CCFFCC" style="padding: 5px; border: none;">&nbsp;</td>
+  </tr>
+</table>
+</form>
 
 <table>
 <tr>
