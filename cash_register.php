@@ -63,7 +63,7 @@ if(isset($_POST['btnSearch2'])) {
     }
 }
 
-// 2. PAYMENT LOGIC
+
 if(isset($_POST['btnPayment'])) {
     if(!isset($_POST['payment']) || $_POST['payment'] == ""){
         echo "<script>alert('Please enter payment amount.');</script>";
