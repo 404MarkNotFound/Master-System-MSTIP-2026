@@ -36,7 +36,7 @@ $net_total = 0;
 $payment = 0;
 $change = 0;
 
-$sql1 = " SELECT * from cart order by productname ASC, productbrand ASC ";
+$sql1 = " SELECT * from products order by productname ASC, productbrand ASC ";
 $result = mysqli_query($conn, $sql1) ; 
 
 // //-- SEARCH by individual
