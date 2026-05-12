@@ -1,3 +1,14 @@
+<?php
+session_start();
+if (!isset($_SESSION['accesslevel']) || $_SESSION['accesslevel'] != 'Admin') {
+    echo "<script>
+        alert('You are not authorized to view this page');
+        location.href='login.php';
+    </script>";
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
