@@ -1,14 +1,3 @@
-<?php
-session_start();
-if (!isset($_SESSION['accesslevel']) || $_SESSION['accesslevel'] != 'Admin') {
-    echo "<script>
-        alert('You are not authorized to view this page');
-        location.href='login.php';
-    </script>";
-    exit();
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -120,6 +109,16 @@ body {margin:0;font-family:Arial}
     text-align: left;
   }
 }
+<?php
+session_start();
+if (!isset($_SESSION['accesslevel']) || $_SESSION['accesslevel'] != 'Admin') {
+    echo "<script>
+        alert('You are not authorized to view this page');
+        location.href='login.php';
+    </script>";
+    exit();
+}
+?>
 </style>
 </head>
 <body>
@@ -133,7 +132,7 @@ body {margin:0;font-family:Arial}
     <div class="dropdown-content">
       <a href="cash_register.php">Cash Register</a>
       <a href="sales_masterlist.php">Sales Masterlist</a>
-      <a href="time_logs.php">Time Logs</a>
+      <a href="login.php">Log out</a>
     </div>
   </div> 
    <div class="dropdown">
