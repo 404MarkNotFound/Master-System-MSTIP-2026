@@ -53,7 +53,7 @@ input[type=submit]:hover {
 //include("webconnect.php");
 
 $servername = "localhost";
-$database = "enterprise_architecture";
+$database = "master_system";
 $username = "root";
 $password = "";
 
@@ -86,7 +86,7 @@ $email = $_SESSION['username'];
 
 <SCRIPT language="JavaScript">
 <!--
-    location.href="index.php";
+    location.href="mainmenu.php";
 //  End -->
 </script>			 
 
@@ -125,7 +125,7 @@ $email = $_SESSION['username'];
           <div class="row button">
             <input type="submit" value="Login" name="Submit">
           </div>
-		<div class="signup-link"><a href="index.php">Back to Home</a>&nbsp;</div>		  
+		<div class="signup-link"><a href="mainmenu.php">Back to Home</a>&nbsp;</div>		  
        </form>
       </div>
     </div>
