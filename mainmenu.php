@@ -147,7 +147,7 @@ $accesslevel = $_SESSION['accesslevel'];
     <div class="dropdown-content">
       <a href="add_products.php">Add Products</a>
       <a href="inventory.php">Products Masterlist</a>
-      <a href="login.php">Time Logs</a>
+      <a href="login.php">Login</a>
     </div>
   </div> 
   <?php } ?>
