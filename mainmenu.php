@@ -134,6 +134,10 @@ if (!isset($_SESSION['accesslevel']) || $_SESSION['accesslevel'] != 'Admin') {
       <a href="sales_masterlist.php">Sales Masterlist</a>
       <a href="login.php">Log out</a>
     </div>
+
+    <?php
+        if(@$_SESSION['accesslevel']== 'Inventory') {
+    ?>
   </div> 
    <div class="dropdown">
     <button class="dropbtn">Inventory Sys
@@ -144,6 +148,7 @@ if (!isset($_SESSION['accesslevel']) || $_SESSION['accesslevel'] != 'Admin') {
       <a href="inventory.php">Products Masterlist</a>
       <a href="login.php">Login</a>
     </div>
+    <?php } ?>
   </div> 
    <div class="dropdown">
     <button class="dropbtn">Payroll Sys
