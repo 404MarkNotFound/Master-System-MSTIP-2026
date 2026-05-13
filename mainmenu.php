@@ -111,22 +111,13 @@ body {margin:0;font-family:Arial}
 }
 <?php
 session_start();
-<<<<<<< HEAD
 if (!isset($_SESSION['accesslevel']) || $_SESSION['accesslevel'] != 'Admin') {
-=======
-if (!isset($_SESSION['accesslevel'])) {
->>>>>>> 1778719ac91e0efc6684c6de76db1aedb42aa2c4
     echo "<script>
         alert('You are not authorized to view this page');
         location.href='login.php';
     </script>";
     exit();
 }
-<<<<<<< HEAD
-=======
-
-$accesslevel = $_SESSION['accesslevel'];
->>>>>>> 1778719ac91e0efc6684c6de76db1aedb42aa2c4
 ?>
 </style>
 </head>
@@ -134,10 +125,6 @@ $accesslevel = $_SESSION['accesslevel'];
 
 <div class="topnav" id="myTopnav">
   <a href="home.php" class="active">Home</a>
-<<<<<<< HEAD
-=======
-  <?php if ($accesslevel == 'Admin' || $accesslevel == 'POS') { ?>
->>>>>>> 1778719ac91e0efc6684c6de76db1aedb42aa2c4
   <div class="dropdown">
     <button class="dropbtn">Points of Sales
       <i class="fa fa-caret-down"></i>
@@ -148,11 +135,6 @@ $accesslevel = $_SESSION['accesslevel'];
       <a href="login.php">Log out</a>
     </div>
   </div> 
-<<<<<<< HEAD
-=======
-  <?php } ?>
-  <?php if ($accesslevel == 'Admin' || $accesslevel == 'Inventory') { ?>
->>>>>>> 1778719ac91e0efc6684c6de76db1aedb42aa2c4
    <div class="dropdown">
     <button class="dropbtn">Inventory Sys
       <i class="fa fa-caret-down"></i>
@@ -175,11 +157,6 @@ $accesslevel = $_SESSION['accesslevel'];
       <a href="time_logs.php">Time Logs</a>
     </div>
   </div> 
-<<<<<<< HEAD
-=======
-  <?php } ?>
-  <?php if ($accesslevel == 'Admin') { ?>
->>>>>>> 1778719ac91e0efc6684c6de76db1aedb42aa2c4
    <div class="dropdown">
     <button class="dropbtn">Attendance Sys
       <i class="fa fa-caret-down"></i>
@@ -190,11 +167,6 @@ $accesslevel = $_SESSION['accesslevel'];
       <a href="time_logs.php">Time Logs</a>
     </div>
   </div> 
-<<<<<<< HEAD
-=======
-  <?php } ?>
-  <?php if ($accesslevel == 'Admin' || $accesslevel == 'HR') { ?>
->>>>>>> 1778719ac91e0efc6684c6de76db1aedb42aa2c4
     <div class="dropdown">
     <button class="dropbtn">HR Sys
       <i class="fa fa-caret-down"></i>
@@ -204,10 +176,6 @@ $accesslevel = $_SESSION['accesslevel'];
       <a href="employees_masterlist.php">Employee Masterlist</a>
     </div>
   </div> 
-<<<<<<< HEAD
-=======
-  <?php } ?>
->>>>>>> 1778719ac91e0efc6684c6de76db1aedb42aa2c4
   <a href="#">About</a>
   
   <a href="javascript:void(0);" class="icon" onclick="myFunction()">
