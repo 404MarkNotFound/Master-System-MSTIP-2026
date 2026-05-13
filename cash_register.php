@@ -21,82 +21,56 @@ $subtotals = 0;
 $payment = 0;
 $change = 0;
 
-// 1. SECURED ADD TO CART (PREVENTS NEGATIVE)
+// 1. ADD TO CART LOGIC
 if(isset($_POST['btnSearch2'])) {
     $qty_in = intval($_POST['criteria']);
     $prod_id = mysqli_real_escape_string($conn, $_POST['textsearch2']);
 
     if($prod_id != "" && $qty_in > 0) {
-        // A. Kunin ang actual stock sa products table
         $get_prod = mysqli_query($conn, "SELECT * FROM products WHERE productnumber='$prod_id'");
         $p = mysqli_fetch_assoc($get_prod);
         
         if($p) {
-            $db_stock = intval($p['quantity']); // Mula sa database
-
-            // B. Kunin kung ilan na ang nasa CART para sa product na ito
-            $check_cart_qty = mysqli_query($conn, "SELECT SUM(quantity) as in_cart FROM cart WHERE productnumber='$prod_id'");
-            $c_qty = mysqli_fetch_assoc($check_cart_qty);
-            $current_in_cart = intval($c_qty['in_cart']);
-
-            // C. TOTAL na magiging laman ng cart kung itutuloy ang add
-            $total_requested = $current_in_cart + $qty_in;
-
-            if($db_stock <= 0) {
-                echo "<script>alert('Error: Item is Out of Stock!');</script>";
-            } 
-            elseif($total_requested > $db_stock) {
-                // Ito ang pipigil para hindi maging negative
-                $allowed = $db_stock - $current_in_cart;
-                echo "<script>alert('Error: Cannot add more! Available stock is only $db_stock. You already have $current_in_cart in cart.');</script>";
-            } 
-            else {
+            $db_stock = intval($p['quantity']); 
+            if($db_stock >= $qty_in) {
                 $pName = $p['productname'];
                 $price = $p['price'];
                 $sub = $qty_in * $price;
                 mysqli_query($conn, "INSERT INTO cart (quantity, productnumber, productname, price, subtotal, sales_date) 
                                     VALUES ('$qty_in', '$prod_id', '$pName', '$price', '$sub', '$datep')");
+            } else {
+                echo "<script>alert('Error: Out of Stock!');</script>";
             }
-        } else {
-            echo "<script>alert('Product Number not found!');</script>";
         }
     }
 }
 
-
+// 2. PAYMENT LOGIC
 if(isset($_POST['btnPayment'])) {
-    if(!isset($_POST['payment']) || $_POST['payment'] == ""){
-        echo "<script>alert('Please enter payment amount.');</script>";
-    } else {
-        $payment = floatval($_POST['payment']);
-        $check_cart = mysqli_query($conn, "SELECT SUM(subtotal) as total FROM cart");
-        $c_row = mysqli_fetch_assoc($check_cart);
-        $net_sales = $c_row['total'];
-        $grand_total = $net_sales + ($net_sales * 0.12);
+    $payment = floatval($_POST['payment']);
+    $check_cart = mysqli_query($conn, "SELECT SUM(subtotal) as total FROM cart");
+    $c_row = mysqli_fetch_assoc($check_cart);
+    $total_due = $c_row['total'] * 1.12;
+
+    if($payment >= $total_due && $total_due > 0) {
+        $change = $payment - $total_due;
+        $inv_no = 'INV-' . time();
+        $get_cart = mysqli_query($conn, "SELECT * FROM cart");
         
-        if($payment >= $grand_total && $grand_total > 0) {
-            $change = $payment - $grand_total;
-            $inv_no = 'INV-' . time();
-
-            $get_all_cart = mysqli_query($conn, "SELECT * FROM cart");
-            while($row = mysqli_fetch_assoc($get_all_cart)) {
-                $p_num = $row['productnumber'];
-                $q_ordered = $row['quantity'];
-                
-                // DITO ANG ACTUAL DEDUCTION SA MASTERLIST
-                mysqli_query($conn, "UPDATE products SET quantity = quantity - $q_ordered WHERE productnumber = '$p_num'");
-
-                mysqli_query($conn, "INSERT INTO sales (sales_invoice, sales_date, productname, quantity, price, subtotal, emp_num) 
-                                    VALUES ('$inv_no', NOW(), '{$row['productname']}', '$q_ordered', '{$row['price']}', '{$row['subtotal']}', '$current_emp')");
-            }
-            mysqli_query($conn, "DELETE FROM cart"); 
-            echo "<script>alert('Transaction Successful!'); window.location='cash_register.php';</script>";
-        } else {
-            echo "<script>alert('Insufficient Amount!');</script>";
+        while($rc = mysqli_fetch_assoc($get_cart)){
+            $pnum = $rc['productnumber'];
+            $qnt = $rc['quantity'];
+            mysqli_query($conn, "UPDATE products SET quantity = quantity - $qnt WHERE productnumber = '$pnum'");
+            mysqli_query($conn, "INSERT INTO sales (sales_invoice, sales_date, productname, quantity, price, subtotal, emp_num) 
+                                VALUES ('$inv_no', NOW(), '{$rc['productname']}', '$qnt', '{$rc['price']}', '{$rc['subtotal']}', '$current_emp')");
         }
+        mysqli_query($conn, "DELETE FROM cart");
+        echo "<script>alert('Transaction Successful!'); window.location='cash_register.php';</script>";
     }
 }
-$cart_display = mysqli_query($conn, "SELECT * FROM cart ORDER BY id ASC");
+
+// PAGPILI NG DISPLAY: Products ang database source
+$product_db = mysqli_query($conn, "SELECT * FROM products ORDER BY id ASC");
 ?>
 
 <body>
@@ -122,12 +96,30 @@ $cart_display = mysqli_query($conn, "SELECT * FROM cart ORDER BY id ASC");
     <td colspan="2" bgcolor="#E0E8F1" class="style141">Items</td>
     <td align="center" bgcolor="#E0E8F1" class="style141">Item Totals</td>
   </tr>
- <?php while($item = mysqli_fetch_assoc($cart_display)) { $subtotals += $item['subtotal']; ?>
+  
+  <?php 
+  while($prod = mysqli_fetch_assoc($product_db)) { 
+      $pnum = $prod['productnumber'];
+      
+      // Dito natin hahanapin kung ang product na ito ay kasalukuyang binibili (nasa cart)
+      $cart_check = mysqli_query($conn, "SELECT quantity FROM cart WHERE productnumber='$pnum'");
+      if(mysqli_num_rows($cart_check) > 0) {
+          $cart_row = mysqli_fetch_assoc($cart_check);
+          $order_qty = $cart_row['quantity'];
+          
+          // Eto yung calculation code na hardcoded para sa subtotal
+          $item_subtotal = $order_qty * $prod['price']; 
+          $subtotals += $item_subtotal;
+  ?>
   <tr>
-    <td colspan="2" class="style138"><?php echo $item['quantity']; ?> X <?php echo $item['productname']; ?> @ <?php echo number_format($item['price'], 2); ?></td>
-    <td align="right" class="style138" style="color: blue;">P <?php echo number_format($item['subtotal'], 2); ?></td>
+    <td colspan="2" class="style138"><?php echo $order_qty; ?> X <?php echo $prod['productname']; ?> @ <?php echo number_format($prod['price'], 2); ?></td>
+    <td align="right" class="style138" style="color: blue;">P <?php echo number_format($item_subtotal, 2); ?></td>
   </tr> 
- <?php } ?>
+  <?php 
+      } // Dito mag-e-end ang IF para yung may order lang ang lumitaw gaya ng sa image_2d7c30.png
+  } 
+  ?>
+
   <tr>
     <td align="left" colspan="2" height="40">
         <form method="POST">
