@@ -1,3 +1,18 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['accesslevel'])) {
+    echo "<script>
+        alert('You are not authorized to view this page');
+        location.href='login.php';
+    </script>";
+    exit();
+}
+
+$accesslevel = $_SESSION['accesslevel'];
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -109,18 +124,6 @@ body {margin:0;font-family:Arial}
     text-align: left;
   }
 }
-<?php
-session_start();
-if (!isset($_SESSION['accesslevel'])) {
-    echo "<script>
-        alert('You are not authorized to view this page');
-        location.href='login.php';
-    </script>";
-    exit();
-}
-
-$accesslevel = $_SESSION['accesslevel'];
-?>
 </style>
 </head>
 <body>
